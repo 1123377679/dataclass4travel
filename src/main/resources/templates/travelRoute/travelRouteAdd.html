@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<title>旅游路线</title>
+	<meta name="renderer" content="webkit"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="format-detection" content="telephone=no"/>
+	<link rel="stylesheet" href="/js/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="/css/font_eolqem241z66flxr.css" media="all"/>
+</head>
+<body class="childrenBody">
+	<form class="layui-form" id="addForm" action="#" method="post">
+		<div class="layui-form-item">
+			<label class="layui-form-label">标题</label>
+			<div class="layui-input-block">
+				<input  id="title" name="title" type="text" class="layui-input newsName" lay-verify="required" placeholder="请输入标题"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">出发地</label>
+			<div class="layui-input-block">
+				<input  id="startSite" name="startSite" type="text" class="layui-input newsName" lay-verify="required" placeholder="请输入出发地"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">目的地</label>
+			<div class="layui-input-block">
+				<input  id="endSite" name="endSite" type="text" class="layui-input newsName" lay-verify="required" placeholder="请输入目的地"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">出团日期</label>
+			<div class="layui-input-inline">
+				<input  type="date" class="layui-input" id="startTime" name="startTime" lay-verify="date" onclick="layui.laydate({elem:this,type: 'datetime'})"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">结束日期</label>
+			<div class="layui-input-inline">
+				<input  type="date" class="layui-input" id="endTime" name="endTime" lay-verify="date" onclick="layui.laydate({elem:this,type: 'datetime'})"/>
+			</div>
+		</div>
+		<!--<div class="layui-form-item">
+			<label class="layui-form-label">天数</label>
+			<div class="layui-input-block">
+				<input th:value="${entity.day}" id="day" name="day" type="number" class="layui-input newsName" lay-verify="required" placeholder="请输入天数"/>
+			</div>
+		</div>-->
+		<div class="layui-form-item">
+			<label class="layui-form-label">价格</label>
+			<div class="layui-input-block">
+				<input  id="price" name="price" type="text" class="layui-input newsName" lay-verify="required" placeholder="请输入价格"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">产品编号</label>
+			<div class="layui-input-block">
+				<input id="productCode" name="productCode" type="text" class="layui-input newsName" lay-verify="required" placeholder="请输入产品编号"/>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">选择图片</label>
+			<div class="layui-upload">
+				<div class="layui-upload-list">
+				   <button type="button" class="layui-btn" id="upload_btn">上传图片</button>
+					<img class="layui-upload-img" id="demo1" style="width: 800px">
+					<input type="hidden" name="imgUrl" id="imgUrl"/>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">路线简介</label>
+			<div class="layui-input-block">
+				<textarea class="layui-textarea"  id="intro" name="intro" lay-verify="content" placeholder="请输入路线简介"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<select id="state" name="state" class="newsLook" lay-filter="browseLook">
+					<option  value="0">待发布</option>
+					<option  value="1">发布</option>
+					<option  value="2">撤销</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" onclick="travelRoute_add();" type="button" lay-submit="">新增旅游路线</button>
+				<a class="layui-btn" th:href="@{/manager/travelRouteList}">返回</a>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript" src="/js/layui/layui.js"></script>
+	<script type="text/javascript" src="/js/travelRoute/travelRouteEdit.js"></script>
+	<script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
+    <script type="text/javascript">
+
+		//新增旅游路线
+		function travelRoute_add() {
+			//表单序列化作用，获取表单中的数据
+			var datas=$("#addForm").serialize();
+			//alert(datas);
+			$.post("/travelRoute_add",datas,function (result) {
+				if(result.code==200){
+					layer.msg('新增成功', {
+						time: 2000, //2s后自动关闭
+					},function () {
+						location.href="/travelRoute_list";
+					});
+				}else{
+					layer.msg('新增异常', {
+						time: 2000, //2s后自动关闭
+					});
+				}
+			});
+		}
+
+		layui.use('upload', function() {
+			var $ = layui.jquery,
+					upload = layui.upload;
+			//普通图片上传
+			var uploadInst = upload.render({
+				elem: '#upload_btn'  //上传的按钮
+				, url: '/uploadImg/travelRoute'  //上传的地址
+				, before: function (obj) {
+					//预读本地文件示例，不支持ie8
+					obj.preview(function (index, file, result) {
+						$('#demo1').attr('src', result); //图片链接（base64）
+					});
+				}
+				, done: function (res) {
+					//如果上传失败
+					if (res.code == 200){
+						$("#imgUrl").val(res.data);//隐藏上传成功的图片地址，新增的时候把地址新增到数据库
+						return layer.msg('文件上传成功!');
+					} else{
+						return layer.msg('文件上传异常',function () {
+							$('#demo1').attr('src', "");
+						});
+					}
+				}
+
+			});
+		});
+
+	</script>
+</body>
+</html>

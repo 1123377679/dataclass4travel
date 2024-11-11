@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <div th:fragment="menu">
+      <div class="fmleft">
+          <div class="fmleft_top"><img src="/images/fmbt1.png" border="0"/></div>
+          <div class="fmlist">
+              <ul>
+                  <li class="f1">订单中心</li>
+                  <li> >><a href="/user_myorderlist">我的订单</a> </li>
+                  <li> >><a href="/user_tomyMessage">我的留言</a> </li>
+              </ul>
+
+              <ul>
+                  <li class="f1">账户信息</li>
+                  <li> >><a href="/user_topersonInfo">个人资料</a> </li>
+                  <li> >><a href="/user_tochangePassword">修改密码</a> </li>
+              </ul>
+          </div>
+      </div>
+  </div>
+</body>
+</html>

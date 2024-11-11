@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+   <h1>留言信息</h1>
+   <p th:utext="${userMessage.content}">
+
+   </p>
+   <h1>留言回复</h1>
+   <p th:if="${userMessage.replyContent==null}">
+      <span >暂无</span>
+   </p>
+   <p th:if="${userMessage.replyContent!=null}" th:text="${userMessage.replyContent}">
+
+   </p>
+</body>
+</html>

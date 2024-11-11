@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>中国梦想游-会员登录页</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="css/common.css" rel="stylesheet" type="text/css"/>
+
+    <!-- 富文本编辑器 -->
+    <link rel="stylesheet" href="/js/new/kindeditor/themes/default/default.css"/>
+    <script charset="utf-8" src="/js/new/kindeditor/kindeditor-all-min.js"></script>
+    <script charset="utf-8" src="/js/new/kindeditor/lang/zh-CN.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
+
+</head>
+<body>
+
+<!--引入公共head-->
+<div th:replace="@{/commons/header}::head"></div>
+<!--引入公共head-->
+
+<div class="b_wrap">
+    <div class="current"><span>当前所在地：</span><a th:href="@{/index}">首页</a> >> <a th:href="@{/useCenter}">会员中心</a></div>
+    <div class="fmember">
+
+        <!--用户菜单引用-->
+        <div th:replace="@{/commons/usermenus}::menu"></div>
+
+        <div class="fmright">
+            <div class="fmr1">
+                <div class="fmr1_top">我的留言</div>
+                <div class="fmr1_m">
+                    <div class="fcard">
+                        <span class="fspan6"><a th:text="'您有'+${messageCount}+'条留言'" href="/user_messageList"></a></span>成功发表体验留言后，会有优惠券赠送，赶快行动吧。
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="fmright">
+            <div class="fmr1">
+                <div class="fmr1_top">我的留言</div>
+                <div class="fmr1_m">
+                    <div class="fcard">
+                        <table border="0" cellpadding="0" cellspacing="0" width="636">
+                            <tr>
+                                <td align="left" height="50">主题：</td>
+                            </tr>
+                            <tr>
+                                <td align="left" height="50"><input type="text" class="finput3" id="title" name="title"
+                                                                    value=""/></td>
+                            </tr>
+                            <tr>
+                                <td align="left" height="70">内容：</td>
+                            </tr>
+                            <tr>
+                                <td align="left" height="70">
+                                    <textarea type="text" style="visibility:hidden;width:200px"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" align="center" valign="middle" height="50">
+                                    <button type="button" onclick="leaveMessage();">
+                                        <input type="image" src="images/fbtn8.png"/></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="footer1">
+
+</div>
+<style>
+    .footer1{
+
+        height: 30px;
+
+        width: 100%;
+
+        background-color: #ddd;
+
+        position: fixed;
+
+        bottom: 0;
+
+    }
+</style>-->
+<!--<div class="footer_w">
+    <div class="footer clearfix">
+        <div class="footer_c">
+      <p>地址：哈佛大学 &nbsp;| &nbsp;服务热线：13559778312 &nbsp; | &nbsp;传真：13559778312  备案号：13559778312</p>
+            <p> 中国梦想旅游发展有限公司 All Rights Reserved. 技术支持：<a href="#">哈佛大学</a></p>
+        </div>
+        <div class="f_logo"><img src="images/b_logo.jpg"/></div>
+        <br style="clear:both"/>
+    </div>
+</div>-->
+</body>
+</html>
+
+<script type="text/javascript">
+
+    //初始化KindEditor编辑器
+    var editor;
+    KindEditor.ready(function (K) {
+        editor = K.create('textarea', {
+            //指定上传文件参数名称等同于<input name="file">属性
+            filePostName: "file",
+            //指定上传文件请求的url
+            uploadJson: '/uploadimg_kindeditor/message',  //上传后台地址,这个文件上传的地址需要自定义修改！！！
+            //上传类型，分别为image、flash、media、file
+            dir: "image",
+            //否允许浏览服务器已上传文件,默认是false
+            allowFileManager: true
+        });
+    });
+
+    function leaveMessage() {
+        var title = $("#title").val();
+        var content = editor.html();
+        /*alert(title);
+        alert(content);*/
+        $.post("/user_leaveMessage", {"title": title, "content": content}, function (result) {
+            if (result.code == 200) {
+                alert("留言成功!");
+                location.href="/user_tomyMessage";
+            } else {
+                alert("留言异常");
+            }
+        }, "json");
+
+    }
+
+</script>

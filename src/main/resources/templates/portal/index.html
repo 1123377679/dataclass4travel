@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>中国梦想游首页</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/common.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/imgtoggle.js"></script>
+    <link href="css/ft-carousel.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="js/ft-carousel.min.js"></script>
+    <style>
+
+        .example {width: 1000px;height: 500px;text-align: center;margin: 20px auto;background-color: #464576;}
+       /* .carousel-item{line-height: 336px;color: #fff;font-family:  Arial Black}*/
+
+    </style>
+<script type="text/javascript">
+window.onload=function(){
+    var iTgl=new k_iToggle();
+        iTgl.init({
+            boxId:'box',
+            numId:'num',
+            imgId:'imgs',
+            isAuto:true,
+            aCls:'act',
+            iCls:'imgs1',
+            direct:'crt'
+        });
+        chg(iTgl,'chg');
+        _auto(iTgl,'auto_1');
+        
+    //改变方向
+    function chg(o,id){
+        $('#'+id).click(function(){
+            if(o.direct()=='crt'){
+                o.direct('lvl');
+                $(this).text('纵向');
+            }else{
+                o.direct('crt');
+                $(this).text('横向');
+            }
+        });
+    }
+    
+    function _auto(o,id){
+        $('#'+id).click(function(){
+            if(o.isAuto){
+                o.isAuto=false;
+                $(this).text('自动播放已停止');
+            }else{
+                o.isAuto=true;
+                o.auto();
+                $(this).text('自动播放');
+            }
+        });
+    }
+}
+</script>
+<script type="text/javascript"> 
+    $(function(){
+        var wweya_li =$("div.tab_menu ul li");
+        wweya_li.click(function(){
+        $(this).addClass("selected")            
+         .siblings().removeClass("selected");  
+            var index =  wweya_li.index(this); 
+        $("div.tab_box > div")  
+        .eq(index).show(100)   
+            .siblings().hide(); 
+                }).hover(function(){
+            $(this).addClass("hover");
+        },function(){
+            $(this).removeClass("hover");           
+        });
+    });
+</script>
+</head>
+<body>
+
+<!--引入公共head-->
+<div th:replace="@{/commons/header}::head"></div>
+<!--引入公共head-->
+
+
+<div class="example" style="width: 1000px;height: 500px">
+    <div class="ft-carousel" id="carousel_1">
+        <ul class="carousel-inner">
+            <li class="carousel-item"><img src="images/aa3.jpg" /></li>
+            <li class="carousel-item"><img src="images/aa4.jpg" /></li>
+            <li class="carousel-item"><img src="images/aa7.jpg" /></li>
+        </ul>
+    </div>
+</div>
+<script>
+
+    $("#carousel_1").FtCarousel();
+
+</script>
+<br/>
+<br/>
+<div class="top_hw clearfix">
+    <div class="top_h clearfix">
+        <div class="top_hl"><a href="#">联系我们</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">关于我们</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">加入我们</a></div>
+        <div class="top_hr">版权所有&nbsp;&nbsp;翻版必究&nbsp;&nbsp;京A234234</div>
+    </div>
+</div>
+</body>
+</html>

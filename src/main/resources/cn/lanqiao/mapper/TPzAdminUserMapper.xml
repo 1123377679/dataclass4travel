@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.mapper.TPzAdminUserMapper">
+
+    <resultMap id="BaseResultMap" type="cn.lanqiao.pojo.TPzAdminUser">
+            <id property="ID" column="ID" jdbcType="VARCHAR"/>
+            <result property="ADD_USER_ID" column="ADD_USER_ID" jdbcType="VARCHAR"/>
+            <result property="ADD_TIME" column="ADD_TIME" jdbcType="TIMESTAMP"/>
+            <result property="DELETE_STATUS" column="DELETE_STATUS" jdbcType="INTEGER"/>
+            <result property="MODIFY_USER_ID" column="MODIFY_USER_ID" jdbcType="VARCHAR"/>
+            <result property="MODIFY_TIME" column="MODIFY_TIME" jdbcType="TIMESTAMP"/>
+            <result property="USER_NAME" column="USER_NAME" jdbcType="VARCHAR"/>
+            <result property="PASSWORD" column="PASSWORD" jdbcType="VARCHAR"/>
+            <result property="LINK_TEL" column="LINK_TEL" jdbcType="VARCHAR"/>
+            <result property="NAME" column="NAME" jdbcType="VARCHAR"/>
+            <result property="STATE" column="STATE" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,ADD_USER_ID,ADD_TIME,
+        DELETE_STATUS,MODIFY_USER_ID,MODIFY_TIME,
+        USER_NAME,PASSWORD,LINK_TEL,
+        NAME,STATE
+    </sql>
+</mapper>

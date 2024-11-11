@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>会员中心-登陆</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/common.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<!--引入公共head-->
+<div th:replace="@{/commons/header}::head"></div>
+<!--引入公共head-->
+
+
+<div class="b_wrap">
+    <div class="current"><span>当前所在地：</span><a th:href="@{/index}">首页</a>  >> <a th:href="@{/goLogin}">会员登录</a></div>
+    <div class="login_w clearfix">
+    <form class="layui-form" method="post" action="/user_login">
+        <div class="login">
+            <div class="login_t">会员登录</div>
+            <div class="login_con">
+                <table class="login_tab" width="270" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td>用户名：</td>
+                    <td><input type="text" id="userName" name="userName" value="" placeholder="请输入用户名"/></td>
+                  </tr>
+                  <tr>
+                    <td>密&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+                    <td><input type="password" id="password" name="password" value="" placeholder="请输入密码"/></td>
+                  </tr>
+                    <tr>
+                        <td>验&nbsp;证&nbsp;&nbsp;&nbsp;码：</td>
+                        <td><input type="text" style="width: 50px" id="code" name="userCode" value="" placeholder="请输入验证码"/>
+                            <img src="/createImage"  id="captcha" style="width:100px; cursor: pointer;" onclick="this.src=this.src+'?d='+Math.random();" title="点击刷新" alt="captcha">
+                        </td>
+                    </tr>
+                  <tr>
+                      <td></td>
+                       <td>
+                           <span th:text="${message}" style="color:red;"></span>
+                       </td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td><button class="log_b" type="submit">登 录</button>
+                        <!--<a class="back_m" th:href="@{/changePassword}">找回密码</a>--></td>
+                  </tr>
+                </table>
+            </div>
+            <div class="login_b">
+                <p>还不是梦想游会员？  <a class="free_zc" href="/user_toregister">免费注册</a> </p>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+    <!--<div class="footer1">
+
+    </div>
+    <style>
+        .footer1{
+
+            height: 30px;
+
+            width: 100%;
+
+            background-color: #ddd;
+
+            position: fixed;
+
+            bottom: 0;
+
+        }
+    </style>-->
+<!--<div class="footer_w">
+    <div class="footer clearfix">
+        <div class="footer_c">
+           <p>地址：哈佛大学 &nbsp;| &nbsp;服务热线：13559778312 &nbsp; | &nbsp;传真：13559778312  备案号：13559778312</p>
+            <p> 中国梦想旅游发展有限公司 All Rights Reserved. 技术支持：<a href="#">哈佛大学</a></p>
+        </div>
+        <div class="f_logo"><img src="images/b_logo.jpg"/></div>
+    </div>
+</div>-->
+</body>
+</html>

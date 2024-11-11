@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<title>景点信息添加</title>
+	<meta name="renderer" content="webkit"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="format-detection" content="telephone=no"/>
+	<link rel="stylesheet" href="/js/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="/css/font_eolqem241z66flxr.css" media="all"/>
+	<!-- 富文本编辑器 -->
+	<link rel="stylesheet" href="/js/new/kindeditor/themes/default/default.css"/>
+	<script charset="utf-8" src="/js/new/kindeditor/kindeditor-all-min.js"></script>
+	<script charset="utf-8" src="/js/new/kindeditor/lang/zh-CN.js"></script>
+
+</head>
+<body class="childrenBody">
+	<form class="layui-form" id="updateForm">
+		<input th:value="${entity.id}" id="id" name="id" type="hidden"/>
+		<div class="layui-form-item">
+			<label class="layui-form-label">景点名称</label>
+			<div class="layui-input-block">
+				<input th:value="${entity.spotName}" id="spotName" name="spotName" type="text" class="layui-input newsName" lay-verify="required" placeholder="请输入景点名称"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">景点等级</label>
+			<div class="layui-input-block">
+				<input type="radio" th:checked="${entity.spotStar==1?'checked':'false'}" name="spotStar" value="1" title="A"/>
+				<input type="radio" th:checked="${entity.spotStar==2?'checked':'false'}" name="spotStar" value="2" title="AA"/>
+				<input type="radio" th:checked="${entity.spotStar==3?'checked':'false'}" name="spotStar" value="3" title="AAA"/>
+				<input type="radio" th:checked="${entity.spotStar==4?'checked':'false'}" name="spotStar" value="4" title="AAAA"/>
+				<input type="radio" th:checked="${entity.spotStar==5?'checked':'false'}" name="spotStar" value="5" title="AAAAA"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">门票信息</label>
+			<div class="layui-input-block">
+				<input th:value="${entity.ticketsMessage}" id="ticketsMessage" name="ticketsMessage" type="number" class="layui-input newsName" lay-verify="required" placeholder="请输入门票信息"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">景点地址</label>
+			<div class="layui-input-block">
+				<input th:value="${entity.spotAddress}" id="spotAddress" name="spotAddress" type="text" class="layui-input newsName" lay-verify="required" placeholder="请输入景点地址"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">开放时间</label>
+			<div class="layui-input-block">
+				<input th:value="${entity.openTime}" id="openTime" name="openTime" type="text" class="layui-input newsName" lay-verify="required" placeholder="请输入景点开放时间"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">选择图片</label>
+			<div class="layui-upload">
+				<div class="layui-upload-list">
+					<button type="button" class="layui-btn" id="upload_btn">上传图片</button>
+					<img class="layui-upload-img" th:src="${entity.imgUrl}" id="demo1" style="width:300px">
+					<!--隐藏更新成功的图片路径-->
+					<input type="hidden" name="imgUrl" th:value="${entity.imgUrl}" id="imgUrl"/>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">景点简介</label>
+			<div class="layui-input-block">
+				<textarea  style="width:1200px;height:400px;visibility:hidden;" th:text="${entity.spotIntro}" id="spotIntro" lay-verify="content"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<select id="state" name="state" class="newsLook" lay-filter="browseLook">
+					<option th:selected="${entity.state==0?'selected':'false'}" value="0">待发布</option>
+					<option th:selected="${entity.state==1?'selected':'false'}" value="1">发布</option>
+					<option th:selected="${entity.state==2?'selected':'false'}" value="2">撤销</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" type="button" onclick="scenicSpot_update();" lay-submit="">更新旅游景点信息</button>
+				<a class="layui-btn" href="/scenicSpot_list">返回</a>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript" src="/js/layui/layui.js"></script>
+	<script type="text/javascript" src="/js/scenicSpot/scenicSpotEdit.js"></script>
+	<script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
+
+	<script type="text/javascript">
+
+		//初始化KindEditor编辑器
+		var editor;
+		KindEditor.ready(function (K) {
+			editor = K.create('textarea', {
+				//指定上传文件参数名称等同于<input name="file">属性
+				filePostName  : "file",
+				//指定上传文件请求的url
+				uploadJson : '/uploadimg_kindeditor/scenicSpot',  //上传后台地址,这个文件上传的地址需要自定义修改！！！
+				//上传类型，分别为image、flash、media、file
+				dir : "image",
+				//否允许浏览服务器已上传文件,默认是false
+				allowFileManager: true
+			});
+		});
+
+		layui.use('upload', function() {
+			var $ = layui.jquery,
+					upload = layui.upload;
+			//普通图片上传
+			var uploadInst = upload.render({
+				elem: '#upload_btn'  //上传的按钮
+				, url: '/uploadImg/scenicSpot'  //上传的地址
+				, before: function (obj) {
+					//预读本地文件示例，不支持ie8
+					obj.preview(function (index, file, result) {
+						$('#demo1').attr('src', result); //图片链接（base64）
+					});
+				}
+				, done: function (res) {
+					//如果上传失败
+					if (res.code == 200){
+						$("#imgUrl").val(res.data);//隐藏上传成功的图片地址，更新的时候把地址更新到数据库
+						return layer.msg('文件上传成功!');
+					} else{
+						return layer.msg('文件上传异常',function () {
+							$('#demo1').attr('src', "");
+						});
+					}
+				}
+			});
+		});
+
+		//更新景点
+		function scenicSpot_update() {
+			//表单序列化作用，获取表单中的数据
+			//提取编辑器内容
+			var spotIntro =editor.html();
+			//表单序列化作用，获取表单中的数据
+			var datas=$("#updateForm").serialize()+"&spotIntro="+spotIntro;
+			$.post("/scenicSpot_update",datas,function (result) {
+				if(result.code==200){
+					layer.msg('更新成功', {
+						time: 2000, //2s后自动关闭
+					},function () {
+						location.href="/scenicSpot_list";
+					});
+				}else{
+					layer.msg('更新异常', {
+						time: 2000, //2s后自动关闭
+					});
+				}
+			});
+		}
+
+
+	</script>
+</body>
+</html>

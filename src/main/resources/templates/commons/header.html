@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
+</head>
+<body>
+<!--抽取公共片段-->
+<div th:fragment="head">
+    <div class="top_hw clearfix">
+        <div class="top_h clearfix">
+            <div class="top_hl"><span>欢迎来到中国梦想游，让你的梦想全程免费自由行！</span> 预定热线：<b>0571-63322269</b></div>
+            <div class="top_hr"><a th:if="${session.userName==null}" th:href="@{/user_toregister}">会员注册</a> | <span
+                    th:if="${session.userName!=null}" th:text="'欢迎你，'+${session.userName}"></span><a
+                    th:if="${session.userName==null}" th:href="@{/user_tologin}">登录</a>
+                | <a th:if="${session.userName!=null}" href="javascript:user_logout();">退出</a></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function user_logout() {
+            if (confirm("确定退出吗?")) {
+                location.href = "/user_logout";
+            }
+        }
+    </script>
+    <div class="head_w">
+        <div class="head_t clearfix">
+            <div class="logo"><img src="/images/logo.jpg"/></div>
+            <div class="rx_line"><img src="/images/rx.jpg"/></div>
+        </div>
+    </div>
+
+    <div class="mainNav clearfix">
+        <ul class="Nav_ul">
+            <li th:class="${val=='index'?'cur':''}"><a th:href="@{/}">首页</a><img src="/images/nav_line.jpg"/></li>
+            <li th:class="${val=='portal_travelRoute_list'?'cur':''}"><a th:href="@{/portal_travelRoute_list}">旅游路线</a><img src="/images/nav_line.jpg"/></li>
+            <li th:class="${val=='portal_scenicSpot_list'?'cur':''}"><a th:href="@{/portal_scenicSpot_list}">旅游景点</a><img src="/images/nav_line.jpg"/></li>
+            <li th:class="${val=='portal_hotel_list'?'cur':''}"><a href="/portal_hotel_list">餐饮住宿</a><img src="/images/nav_line.jpg"/></li>
+            <li th:class="${val=='portal_car_list'?'cur':''}"><a href="/portal_car_list">旅游车票</a><img src="/images/nav_line.jpg"/></li>
+            <li th:class="${val=='portal_insurance_list'?'cur':''}"><a href="/portal_insurance_list">旅游保险</a><img src="/images/nav_line.jpg"/></li>
+            <li th:class="${val=='portal_strategy_list'?'cur':''}"><a href="/portal_strategy_list">旅游攻略</a><img src="/images/nav_line.jpg"/></li>
+            <li th:class="${val=='portal_attention'?'cur':''}"><a href="/portal_attention">注意事项</a><img src="/images/nav_line.jpg"/></li>
+            <li  th:if="${session.userName!=null}"><a th:href="@{/user_tocenter}">会员中心</a><img src="/images/nav_line.jpg"/>
+            </li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>
