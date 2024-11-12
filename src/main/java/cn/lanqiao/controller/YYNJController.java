@@ -1,7 +1,7 @@
 package cn.lanqiao.controller;
 
-public class LYJTest {
+public class YYNJController {
     public static void main(String[] args) {
-        System.out.println("lmx(继承)(重写)");
+    System.out.println("njt妈妈走了");
     }
 }
