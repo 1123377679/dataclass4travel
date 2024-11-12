@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("cn.lanqiao.mapper")
+@MapperScan("cn.lanqiao.dataclass4travel.mapper")
 public class Dataclass4travelApplication {
 
     public static void main(String[] args) {

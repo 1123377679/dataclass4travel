@@ -153,12 +153,12 @@
 					<input type="password" id="password" name="password" required="required" lay-verify="password" placeholder="请输入密码" autocomplete="off" class="layui-input"/>
 				</div>
 			</div>
-			<div class="layui-form-item">
-				<div class="layui-input-black">
-					<input type="text" id="code" name="userCode" required="required" lay-verify="password" placeholder="请输入验证码" autocomplete="off" class="layui-input"/>
-					<img src="/createImage"  id="captcha" style="cursor: pointer;" onclick="this.src=this.src+'?d='+Math.random();" title="点击刷新" alt="captcha">
-				</div>
-			</div>
+<!--			<div class="layui-form-item">-->
+<!--				<div class="layui-input-black">-->
+<!--					<input type="text" id="code" name="userCode" required="required" lay-verify="password" placeholder="请输入验证码" autocomplete="off" class="layui-input"/>-->
+<!--					<img src="/createImage"  id="captcha" style="cursor: pointer;" onclick="this.src=this.src+'?d='+Math.random();" title="点击刷新" alt="captcha">-->
+<!--				</div>-->
+<!--			</div>-->
 			<div><p th:text="${message}" style="color: red"></p></div>
 			<button class="layui-btn" type="submit" style="width:100%; background-color: #393d47">登录</button>
 		</form>
