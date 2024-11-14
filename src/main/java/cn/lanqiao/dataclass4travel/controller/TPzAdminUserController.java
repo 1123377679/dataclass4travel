@@ -2,6 +2,8 @@ package cn.lanqiao.dataclass4travel.controller;
 
 import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.service.TPzAdminUserService;
+import cn.lanqiao.dataclass4travel.utils.CommonResult;
+import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @Author: 李某人
@@ -51,7 +54,7 @@ public class TPzAdminUserController {
     }
 
     /**
-     * 01-分页查询列表
+     * 02-分页查询列表
      * @return
      */
     @RequestMapping("/admin_list")
@@ -66,5 +69,35 @@ public class TPzAdminUserController {
         PageHelper<TPzAdminUser> pagerHelper=new PageHelper<TPzAdminUser>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());
         model.addAttribute("pagerHelper",pagerHelper);
         return "admin/adminList";
+    }
+
+    /**
+     * 03-跳转新增页面
+     */
+    @RequestMapping("/admin_toadd")
+    public String toAdd(){
+        return "admin/adminAdd";
+    }
+    /**
+     * 04-新增功能(异步请求)
+     */
+    @RequestMapping("/admin_add")
+    @ResponseBody
+    public CommonResult add(TPzAdminUser tPzAdminUser,HttpSession session){
+        try {
+            //设置当前系统时间
+            String nowTime = DateUtils.getNowTime();
+            tPzAdminUser.setAddTime(nowTime);
+            //设置添加人的id,从session中获取addUserId
+            TPzAdminUser admin = (TPzAdminUser) session.getAttribute("admin");
+            tPzAdminUser.setAddUserId(admin.getAddUserId());
+            //操作数据库进行添加
+            System.out.println("要新增的对象是:"+tPzAdminUser);
+            //需要响应类
+            return new CommonResult(200,"请求成功",tPzAdminUserService.save(tPzAdminUser));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new CommonResult(304,"请求异常");
+        }
     }
 }
