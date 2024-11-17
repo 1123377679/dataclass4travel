@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 * @createDate 2024-11-12 22:45:34
 */
 @Service
-public class TPzAdminUserServiceImpl extends ServiceImpl<TPzAdminUserMapper, TPzAdminUser>
-    implements TPzAdminUserService{
+public class TPzAdminUserServiceImpl extends ServiceImpl<TPzAdminUserMapper, TPzAdminUser> implements TPzAdminUserService{
 
 }
 
