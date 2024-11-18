@@ -61,9 +61,11 @@ public class TravelRouteController {
     }
     //跳转到编辑页面
     @RequestMapping("/travelRoute_toEdit")
-    public String toEdit(Integer id,Model entity){
-        TCmsTravelRoute tCmsTravelRoute = tCmsTravelRouteService.getById(id);
-        entity.addAttribute("travelRoute",tCmsTravelRoute);
+    public String toEdit(String id,TCmsTravelRoute tCmsTravelRoute, HttpSession session, Model model){
+        tCmsTravelRoute.setId(id);
+//        tCmsTravelRoute = tCmsTravelRouteService.getById(id);
+        model.addAttribute("tCmsTravelRoute", tCmsTravelRoute);
+        //session.setAttribute("tCmsTravelRoute",tCmsTravelRoute);
         return "travelRoute/travelRouteEdit";
     }
     //编辑路线
@@ -75,7 +77,7 @@ public class TravelRouteController {
             String nowTime = DateUtils.getNowTime();
             tCmsTravelRoute.setAddTime(nowTime);
             //操作数据库进行添加
-            System.out.println("要新增的对象是:"+tCmsTravelRoute);
+            System.out.println("要修改的对象是:"+tCmsTravelRoute);
             //需要响应类
             return new CommonResult(200,"请求成功",tCmsTravelRouteService.updateById(tCmsTravelRoute));
         } catch (Exception e) {
