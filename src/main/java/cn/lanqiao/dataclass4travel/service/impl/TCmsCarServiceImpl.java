@@ -6,7 +6,7 @@ import cn.lanqiao.dataclass4travel.service.TCmsCarService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
-import java.security.Provider;
+
 @Service
 public class TCmsCarServiceImpl extends ServiceImpl<TCmsCarMapper, TCmsCar> implements TCmsCarService {
 }
