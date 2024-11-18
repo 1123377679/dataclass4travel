@@ -59,4 +59,27 @@ public class TravelRouteController {
             throw new RuntimeException(e);
         }
     }
+    //跳转到编辑页面
+    @RequestMapping("/travelRoute_toEdit")
+    public String toEdit(Integer id,Model entity){
+        TCmsTravelRoute tCmsTravelRoute = tCmsTravelRouteService.getById(id);
+        entity.addAttribute("travelRoute",tCmsTravelRoute);
+        return "travelRoute/travelRouteEdit";
+    }
+    //编辑路线
+    @RequestMapping("/travelRoute_update")
+    @ResponseBody
+    public CommonResult editRoute(TCmsTravelRoute tCmsTravelRoute, HttpSession session){
+        try {
+            //设置当前系统时间
+            String nowTime = DateUtils.getNowTime();
+            tCmsTravelRoute.setAddTime(nowTime);
+            //操作数据库进行添加
+            System.out.println("要新增的对象是:"+tCmsTravelRoute);
+            //需要响应类
+            return new CommonResult(200,"请求成功",tCmsTravelRouteService.updateById(tCmsTravelRoute));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
