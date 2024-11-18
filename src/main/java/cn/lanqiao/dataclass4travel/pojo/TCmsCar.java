@@ -1,7 +1,10 @@
 package cn.lanqiao.dataclass4travel.pojo;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName("t_cms_car")
 public class TCmsCar {
-
+  //雪花算法
+  @TableId(type = IdType.ASSIGN_UUID)
   private String id;
   private String addUserId;
   private String addTime;
