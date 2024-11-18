@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.dataclass4travel.mapper.TYwOrderMapper">
+
+    <resultMap id="BaseResultMap" type="cn.lanqiao.dataclass4travel.pojo.TYwOrder">
+            <id property="ID" column="ID" jdbcType="VARCHAR"/>
+            <result property="ADD_USER_ID" column="ADD_USER_ID" jdbcType="VARCHAR"/>
+            <result property="ADD_TIME" column="ADD_TIME" jdbcType="TIMESTAMP"/>
+            <result property="DELETE_STATUS" column="DELETE_STATUS" jdbcType="INTEGER"/>
+            <result property="MODIFY_USER_ID" column="MODIFY_USER_ID" jdbcType="VARCHAR"/>
+            <result property="MODIFY_TIME" column="MODIFY_TIME" jdbcType="TIMESTAMP"/>
+            <result property="USER_ID" column="USER_ID" jdbcType="VARCHAR"/>
+            <result property="USER_NAME" column="USER_NAME" jdbcType="VARCHAR"/>
+            <result property="PRODUCT_ID" column="PRODUCT_ID" jdbcType="VARCHAR"/>
+            <result property="PRODUCT_NAME" column="PRODUCT_NAME" jdbcType="VARCHAR"/>
+            <result property="FEE" column="FEE" jdbcType="DOUBLE"/>
+            <result property="PRODUCT_TYPE" column="PRODUCT_TYPE" jdbcType="INTEGER"/>
+            <result property="STATE" column="STATE" jdbcType="INTEGER"/>
+            <result property="ORDER_CODE" column="ORDER_CODE" jdbcType="VARCHAR"/>
+            <result property="ORDER_TIME" column="ORDER_TIME" jdbcType="VARCHAR"/>
+            <result property="SETOFF_TIME" column="SETOFF_TIME" jdbcType="VARCHAR"/>
+            <result property="LINK_TEL" column="LINK_TEL" jdbcType="VARCHAR"/>
+            <result property="PEOPLE_COUNT" column="PEOPLE_COUNT" jdbcType="INTEGER"/>
+            <result property="REQUIREMENT" column="REQUIREMENT" jdbcType="VARCHAR"/>
+            <result property="IC_CODE" column="IC_CODE" jdbcType="VARCHAR"/>
+            <result property="IMG_URL" column="IMG_URL" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,ADD_USER_ID,ADD_TIME,
+        DELETE_STATUS,MODIFY_USER_ID,MODIFY_TIME,
+        USER_ID,USER_NAME,PRODUCT_ID,
+        PRODUCT_NAME,FEE,PRODUCT_TYPE,
+        STATE,ORDER_CODE,ORDER_TIME,
+        SETOFF_TIME,LINK_TEL,PEOPLE_COUNT,
+        REQUIREMENT,IC_CODE,IMG_URL
+    </sql>
+</mapper>
