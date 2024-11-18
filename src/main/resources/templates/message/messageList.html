@@ -57,7 +57,7 @@
 						<a title="查看用户留言" class="layui-btn layui-btn-xs" th:href="|/message_View/${var.id}|">
 							<i class="layui-icon">&#xe60a;</i>
 						</a>
-						<a th:if="${var.replyContent==null}" class="layui-btn layui-btn-xs layui-btn-normal" th:href="|/message_replyView/${var.id}|">
+						<a th:if="${var.content==null}" class="layui-btn layui-btn-xs layui-btn-normal" th:href="|/message_replyView/${var.id}|">
 							<i class="layui-icon">&#xe618;</i>
 						</a>
 						<a class="layui-btn layui-btn-xs layui-btn-danger" th:href="|javascript:messageDelete('${var.id}')|">
