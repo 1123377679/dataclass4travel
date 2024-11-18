@@ -22,7 +22,7 @@ public class TCmsScenicSpotController {
     private TCmsScenicSpotService tCmsScenicSpotService;
 
     /**
-     * 分页查询
+     * 01-分页查询
      */
     @RequestMapping("/scenicSpot_list")
     public String list(@RequestParam(defaultValue = "1") Long pageNumber,
@@ -36,5 +36,13 @@ public class TCmsScenicSpotController {
         PageHelper<TCmsScenicSpot> pagerHelper = new PageHelper<TCmsScenicSpot>(pageNumber, pageSize, page.getPages(), page.getTotal(), page.getRecords());
         model.addAttribute("pagerHelper",pagerHelper);
         return "scenicSpot/scenicSpotList";
+    }
+
+    /**
+     * 02-跳转新增页面
+     */
+    @RequestMapping("/scenicSpot_toadd")
+    public String toAdd(){
+        return "admin/scenicSpotAdd";
     }
 }
