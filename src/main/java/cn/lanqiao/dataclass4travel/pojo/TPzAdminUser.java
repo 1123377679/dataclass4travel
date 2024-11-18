@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @TableName("t_pz_admin_user")
 public class TPzAdminUser {
 
-  @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
     private String addUserId;
     private String addTime;
@@ -25,5 +25,6 @@ public class TPzAdminUser {
     private String linkTel;
     private String name;
     private long state;
+
 
 }
