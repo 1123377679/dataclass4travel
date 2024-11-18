@@ -1,5 +1,7 @@
 package cn.lanqiao.dataclass4travel.controller;
 
+import cn.lanqiao.dataclass4travel.mapper.TCmsScenicSpotMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import cn.lanqiao.dataclass4travel.pojo.TCmsScenicSpot;
 import cn.lanqiao.dataclass4travel.service.TCmsScenicSpotService;
@@ -13,24 +15,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@Slf4j
 public class TCmsScenicSpotController {
+
     @Autowired
     private TCmsScenicSpotService tCmsScenicSpotService;
+
+    @Autowired
+    private TCmsScenicSpotMapper tCmsScenicSpotMapper;
 
     /**
      * 分页查询
      */
     @RequestMapping("/scenicSpot_list")
     public String list(@RequestParam(defaultValue = "1") Long pageNumber,
-                @RequestParam(defaultValue = "7") Long pageSize,
-                Model model){
-        QueryWrapper queryWrapper=new QueryWrapper();
+                       @RequestParam(defaultValue = "7") Long pageSize,
+                       Model model){
+        QueryWrapper<TCmsScenicSpot> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("DELETE_STATUS",0);
         queryWrapper.orderByDesc("ADD_TIME");
         IPage page = tCmsScenicSpotService.page(new Page<TCmsScenicSpot>(pageNumber, pageSize), queryWrapper);
         // 封装
         PageHelper<TCmsScenicSpot> pagerHelper = new PageHelper<TCmsScenicSpot>(pageNumber, pageSize, page.getPages(), page.getTotal(), page.getRecords());
         model.addAttribute("pagerHelper",pagerHelper);
-        return "scenicSpot/scenicSpotList.html";
+        return "scenicSpot/scenicSpotList";
     }
 }
