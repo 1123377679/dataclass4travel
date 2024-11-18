@@ -2,5 +2,8 @@ package cn.lanqiao.dataclass4travel.service;
 
 import cn.lanqiao.dataclass4travel.pojo.TCmsInsurance;
 
-public interface InsuranceService extends Iterable<TCmsInsurance> {
+import com.baomidou.mybatisplus.extension.service.IService;
+
+public interface InsuranceService extends IService<TCmsInsurance> {
+
 }
