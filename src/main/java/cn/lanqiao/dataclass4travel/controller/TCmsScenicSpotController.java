@@ -1,6 +1,5 @@
 package cn.lanqiao.dataclass4travel.controller;
 
-import cn.lanqiao.dataclass4travel.mapper.TCmsScenicSpotMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import cn.lanqiao.dataclass4travel.pojo.TCmsScenicSpot;
