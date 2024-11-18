@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("t_cms_insurance")
+//1
 public class TCmsInsurance {
 
   private String id;

@@ -36,6 +36,7 @@ public class InsuranceController {
         //将page对象存入pageHelper对象中
         PageHelper<TCmsInsurance> pageHelper = new PageHelper<TCmsInsurance>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());
         model.addAttribute("pagerHelper", pageHelper);
+        //返回
         return "insurance/insuranceList";
     }
 }
