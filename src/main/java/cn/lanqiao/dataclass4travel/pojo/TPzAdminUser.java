@@ -26,4 +26,5 @@ public class TPzAdminUser {
     private String name;
     private long state;
 
+
 }
