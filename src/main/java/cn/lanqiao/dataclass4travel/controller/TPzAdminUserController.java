@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Description:
  */
 @Controller
-public class TPzAdminUserController {
+public class  TPzAdminUserController {
     @Autowired
     private TPzAdminUserService tPzAdminUserService;
 
