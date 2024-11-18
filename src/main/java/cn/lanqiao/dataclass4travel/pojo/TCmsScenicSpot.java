@@ -22,7 +22,8 @@ public class TCmsScenicSpot {
     private String modifyTime;
     private String spotName;
     private String spotIntro;
-    private long spotAddress;
+    private long spotStar;
+    private String spotAddress;
     private String openTime;
     private long ticketsMessage;
     private long state;

@@ -21,9 +21,6 @@ public class TCmsScenicSpotController {
     @Autowired
     private TCmsScenicSpotService tCmsScenicSpotService;
 
-    @Autowired
-    private TCmsScenicSpotMapper tCmsScenicSpotMapper;
-
     /**
      * 分页查询
      */
