@@ -39,7 +39,7 @@ public class TravelRouteController {
         return "travelRoute/travelRouteList";
     }
     //跳转到添加页面
-    @RequestMapping("/travelRoute_toAdd")
+    @RequestMapping("/travelRoute_toadd")
     public String toAdd(){
         return "travelRoute/travelRouteAdd";
     }
@@ -51,9 +51,6 @@ public class TravelRouteController {
             //设置当前系统时间
             String nowTime = DateUtils.getNowTime();
             tCmsTravelRoute.setAddTime(nowTime);
-            //设置添加人的id,从session中获取addUserId
-            TCmsTravelRoute admin = (TCmsTravelRoute) session.getAttribute("admin");
-            tCmsTravelRoute.setAddUserId(admin.getAddUserId());
             //操作数据库进行添加
             System.out.println("要新增的对象是:"+tCmsTravelRoute);
             //需要响应类
