@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("t_pz_admin_user")
-public class TPzAdminUser {
+@TableName("t_cms_scenic_spot")
+public class TCmsScenicSpot {
 
     @TableId(type = IdType.ASSIGN_UUID)
     private String id;
@@ -20,11 +20,12 @@ public class TPzAdminUser {
     private long deleteStatus;
     private String modifyUserId;
     private String modifyTime;
-    private String userName;
-    private String password;
-    private String linkTel;
-    private String name;
+    private String spotName;
+    private String spotIntro;
+    private long spotStar;
+    private String spotAddress;
+    private String openTime;
+    private long ticketsMessage;
     private long state;
-
-
+    private String imgUrl;
 }

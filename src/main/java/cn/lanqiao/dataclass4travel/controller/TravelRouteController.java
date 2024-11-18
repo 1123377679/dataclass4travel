@@ -1,7 +1,6 @@
 package cn.lanqiao.dataclass4travel.controller;
 
 import cn.lanqiao.dataclass4travel.pojo.TCmsTravelRoute;
-import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.service.TCmsTravelRouteService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
