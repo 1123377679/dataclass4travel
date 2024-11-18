@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.dataclass4travel.mapper.TCmsStrategyMapper">
+
+    <resultMap id="BaseResultMap" type="cn.lanqiao.dataclass4travel.pojo.TCmsStrategy">
+            <id property="id" column="ID" jdbcType="VARCHAR"/>
+            <result property="addUserId" column="ADD_USER_ID" jdbcType="VARCHAR"/>
+            <result property="addTime" column="ADD_TIME" jdbcType="TIMESTAMP"/>
+            <result property="deleteStatus" column="DELETE_STATUS" jdbcType="INTEGER"/>
+            <result property="modifyUserId" column="MODIFY_USER_ID" jdbcType="VARCHAR"/>
+            <result property="modifyTime" column="MODIFY_TIME" jdbcType="TIMESTAMP"/>
+            <result property="imgUrl" column="IMG_URL" jdbcType="VARCHAR"/>
+            <result property="title" column="TITLE" jdbcType="VARCHAR"/>
+            <result property="rating" column="RATING" jdbcType="INTEGER"/>
+            <result property="summary" column="SUMMARY" jdbcType="VARCHAR"/>
+            <result property="introUrl" column="INTRO_URL" jdbcType="VARCHAR"/>
+            <result property="state" column="STATE" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,ADD_USER_ID,ADD_TIME,
+        DELETE_STATUS,MODIFY_USER_ID,MODIFY_TIME,
+        IMG_URL,TITLE,RATING,
+        SUMMARY,INTRO_URL,STATE
+    </sql>
+</mapper>
