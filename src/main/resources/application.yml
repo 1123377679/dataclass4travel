@@ -1,5 +1,5 @@
 server:
-  port: 8081
+ port: 8081
 
 mybatis-plus:
   configuration:
@@ -11,7 +11,7 @@ spring:
   datasource:
     username: root
     password: 20010720Lmx
-    url: jdbc:mysql://lmxdxl99.com.cn:3306/travel?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&characterEncoding=utf8&characterSetResults=utf8
+    url: jdbc:mysql://47.109.206.82:3306/travel?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&characterEncoding=utf8&characterSetResults=utf8
   thymeleaf:
     cache: false
     check-template-location: 'true'
