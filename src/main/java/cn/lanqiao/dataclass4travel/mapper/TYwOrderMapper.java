@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-11-15 17:10:20
 * @Entity cn.lanqiao.dataclass4travel.pojo.TYwOrder
 */
-//orderService
+
 public interface TYwOrderMapper extends BaseMapper<TYwOrder> {
 
 }
