@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.dataclass4travel.mapper.TCmsScenicSpotMapper">
+
+    <resultMap id="BaseResultMap" type="cn.lanqiao.dataclass4travel.pojo.TCmsScenicSpot">
+        <id property="id" column="ID" jdbcType="VARCHAR"/>
+        <result property="addUserId" column="ADD_USER_ID" jdbcType="VARCHAR"/>
+        <result property="addTime" column="ADD_TIME" jdbcType="TIMESTAMP"/>
+        <result property="deleteStatus" column="DELETE_STATUS" jdbcType="INTEGER"/>
+        <result property="modifyUserId" column="MODIFY_USER_ID" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="MODIFY_TIME" jdbcType="TIMESTAMP"/>
+        <result property="spotName" column="SPOT_NAME" jdbcType="VARBINARY"/>
+        <result property="spotIntro" column="SPOT_INTRO" jdbcType="VARBINARY"/>
+        <result property="spotStar" column="SPOT_STAR" jdbcType="INTEGER"/>
+        <result property="spotAddress" column="SPOT_ADDRESS" jdbcType="VARCHAR"/>
+        <result property="openTime" column="OPEN_TIME" jdbcType="VARCHAR"/>
+        <result property="ticketsMessage" column="TICKETS_MESSAGE" jdbcType="DOUBLE"/>
+        <result property="state" column="STATE" jdbcType="INTEGER"/>
+        <result property="imgUrl" column="IMG_URL" jdbcType="VARCHAR"/>
+    </resultMap>
+
+</mapper>
