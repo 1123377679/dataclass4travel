@@ -3,7 +3,7 @@ package cn.lanqiao.dataclass4travel.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+//11
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
