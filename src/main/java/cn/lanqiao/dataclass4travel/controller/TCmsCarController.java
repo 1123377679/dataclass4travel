@@ -9,15 +9,11 @@ import cn.lanqiao.dataclass4travel.utils.PageHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Slf4j
@@ -37,33 +33,54 @@ public class TCmsCarController {
     /*新增车票功能(异步请求)*/
     @RequestMapping("/car_add")
     @ResponseBody
-    public CommonResult add(TCmsCar tCmsCar, HttpSession session){
-        try {
-            //需要设置当前系统的时间
-            String nowTime = DateUtils.getNowTime();
-            tCmsCar.setAddTime(nowTime);
-            //车票管理不需要添加人的id
-//            //设置添加人的id，从session中获取addUserId
-//            TCmsCar admin = (TCmsCar) session.getAttribute("admin");
-//            tCmsCar.setAddUserId(admin.getAddUserId());
+    public CommonResult add(TCmsCar tCmsCar){
+            //设置当前系统时间
+            tCmsCar.setAddTime(DateUtils.getNowTime());
+
+            tCmsCar.setAddUserId("1");
             //操作数据库进行添加
-            System.out.println("要新增的对象是:" + tCmsCar);
+            log.info("新增车票信息："+tCmsCar);
             //需要响应类
             return new CommonResult(200,"请求成功",tCmsCarService.save(tCmsCar));
-        }catch (Exception e){
-            e.printStackTrace();
-            return new CommonResult(304,"请求失败",false);
-        }
 
     }
 
 
-//    /*删除车票功能*/
-//    @DeleteMapping("/car_delete")
-//    @ResponseBody
-//    public CommonResult delete(Long carId){
-//
-//    }
+
+    /*跳转详情页面*/
+    @GetMapping("/car_todetail/{id}")
+    public String todetail(@PathVariable("id") String id,Model model){
+        TCmsCar byId = tCmsCarService.getById(id);
+        model.addAttribute("entity",byId);
+        return "car/carView";
+    }
+
+
+
+    /*跳转更新页面*/
+    @GetMapping("/car_toEdit/{id}")
+    public String toEdit(@PathVariable("id") String id,Model model){
+        //获取id
+        TCmsCar byId = tCmsCarService.getById(id);
+        //回显数据的对象
+        model.addAttribute("entity",byId);
+        return "car/carEdit";
+    }
+
+
+    /*删除车票功能*/
+    //根据id删除
+    @GetMapping("/car_delete/{id}")
+    @ResponseBody
+    public CommonResult delete(@PathVariable("id") String id){
+        //补代码时需要判断这个车票是否在使用，如果在使用要提示暂时不能删除
+        TCmsCar byId = tCmsCarService.getById(id);
+        byId.setDeleteStatus(1L);//删除状态
+        tCmsCarService.updateById(byId);
+        log.info("删除车票信息",id);
+        tCmsCarService.updateById(id);
+        return new CommonResult(200,"请求成功");
+    }
 
 
     /*车票分页查询*/

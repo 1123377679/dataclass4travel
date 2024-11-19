@@ -25,7 +25,6 @@ layui.config({
 		layui.layer.full(index);
 	});
 
-
     /**
      * 01-页码跳转
      */

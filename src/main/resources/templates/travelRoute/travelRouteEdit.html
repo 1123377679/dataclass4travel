@@ -13,7 +13,8 @@
 	<link rel="stylesheet" href="/css/font_eolqem241z66flxr.css" media="all"/>
 </head>
 <body class="childrenBody">
-	<form class="layui-form" id="updateForm" action="#" method="post">
+<!--	-->
+	<form class="layui-form" id="updateForm" action="travelRoute_toEdit/{id}" method="get">
 		<!--隐藏的ID 更新有用-->
 		<input th:value="${entity.id}" id="id" name="id" type="hidden"/>
 		<div class="layui-form-item">

@@ -9,4 +9,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TCmsCarServiceImpl extends ServiceImpl<TCmsCarMapper, TCmsCar> implements TCmsCarService {
+
+    @Override
+    public void updateById(String id) {
+
+    }
 }
