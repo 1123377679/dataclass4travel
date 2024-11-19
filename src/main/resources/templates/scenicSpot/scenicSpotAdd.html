@@ -144,7 +144,7 @@
 			//表单序列化作用，获取表单中的数据
 			var datas=$("#addForm").serialize()+"&spotIntro="+spotIntro;
 			//alert(datas);
-			$.post("/scenicSpot_Add",datas,function (result) {
+			$.post("/scenicSpot_add",datas,function (result) {
 				if(result.code==200){
 					layer.msg('新增成功', {
 						time: 2000, //2s后自动关闭
