@@ -3,6 +3,7 @@ package cn.lanqiao.dataclass4travel.controller;
 import cn.lanqiao.dataclass4travel.pojo.TCmsTravelRoute;
 import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.service.TCmsTravelRouteService;
+import cn.lanqiao.dataclass4travel.service.TPzAdminUserService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
@@ -28,6 +29,8 @@ import java.io.FileNotFoundException;
 public class TravelRouteController {
     @Autowired
     private TCmsTravelRouteService tCmsTravelRouteService;
+    @Autowired
+    private TPzAdminUserService tPzAdminUserService;
     /*车票分页查询*/
     @RequestMapping("/travelRoute_list")
     public String list(@RequestParam(defaultValue = "1") Long pageNumber,
@@ -92,16 +95,15 @@ public class TravelRouteController {
                 File f=new File(realPath);
                 if(f.exists()){
                     f.delete();
-                    System.out.println("删除了老照片，地址是："+realPath);
+                    //System.out.println("删除了老照片，地址是："+realPath);
                 }
             }
             //设置当前系统时间
             String nowTime = DateUtils.getNowTime();
             tCmsTravelRoute.setAddTime(nowTime);
-            //设置新增路线的人ID
-            TPzAdminUser admin = (TPzAdminUser) session.getAttribute("admin");
-            tCmsTravelRoute.setModifyUserId(admin.getModifyUserId());
-            System.out.println("要更新的对象是:"+tCmsTravelRoute);
+            //设置修改路线的人ID
+            tCmsTravelRoute.setModifyUserId(session.getId());
+            //System.out.println("要更新的对象是:"+tCmsTravelRoute);
             //需要响应类
             return new CommonResult(200,"请求成功",tCmsTravelRouteService.updateById(tCmsTravelRoute));
         } catch (Exception e) {
