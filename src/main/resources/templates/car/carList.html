@@ -75,7 +75,7 @@
 						<a class="layui-btn layui-btn-xs layui-btn-normal" th:href="|/car_toEdit/${var.id}|">
 							<i class="layui-icon">&#xe642;</i>
 						</a>
-						<a class="layui-btn layui-btn-xs layui-btn-danger" th:href="|javascript:car_delete('${var.id}')|">
+						<a class="layui-btn layui-btn-xs layui-btn-danger" th:href="|javascript:car_delete('${var.id}')|" onclick="car_delete()">
 							<i class="layui-icon">&#xe640;</i>
 						</a>
 					</td>
