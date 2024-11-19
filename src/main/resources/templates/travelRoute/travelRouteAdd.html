@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="/css/font_eolqem241z66flxr.css" media="all"/>
 </head>
 <body class="childrenBody">
-	<form class="layui-form" id="addForm" action="#" method="post">
+	<form class="layui-form" id="addForm" action="travelRoute_add" method="post">
 		<div class="layui-form-item">
 			<label class="layui-form-label">标题</label>
 			<div class="layui-input-block">
@@ -92,7 +92,7 @@
 		<div class="layui-form-item">
 			<div class="layui-input-block">
 				<button class="layui-btn" onclick="travelRoute_add();" type="button" lay-submit="">新增旅游路线</button>
-				<a class="layui-btn" th:href="@{/manager/travelRouteList}">返回</a>
+				<a class="layui-btn" href="/travelRoute_list">返回</a>
 				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 			</div>
 		</div>
@@ -121,7 +121,6 @@
 				}
 			});
 		}
-
 		layui.use('upload', function() {
 			var $ = layui.jquery,
 					upload = layui.upload;
