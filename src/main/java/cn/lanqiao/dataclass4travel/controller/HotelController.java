@@ -4,16 +4,21 @@ import cn.lanqiao.dataclass4travel.mapper.HotelMapper;
 import cn.lanqiao.dataclass4travel.pojo.Hotel;
 import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.service.HotelService;
+import cn.lanqiao.dataclass4travel.utils.CommonResult;
+import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
 
 
 @Controller
@@ -42,4 +47,96 @@ public class HotelController {
         //应该用工具类返回撒,哦哦你用了的
         return "hotel/hotelList";  // 返回视图
     }
+
+    //跳转新增页面
+    @RequestMapping("/hotel_toadd")
+    public String toAdd(){
+        return "hotel/hotelAdd";
+    }
+
+    //新增功能
+    @PostMapping("/hotel_add")
+    @ResponseBody
+    public CommonResult add( Hotel hotel, HttpSession session){
+        try {
+            // 当前时间
+            String nowTime = DateUtils.getNowTime();
+            hotel.setAddTime(nowTime);
+            // 获取当前管理员信息
+            TPzAdminUser addAdmin = (TPzAdminUser) session.getAttribute("admin");
+            // 没什么必要，以防万一
+            if (addAdmin == null) {
+                return new CommonResult(304, "用户未登录或Session已过期");
+            }
+            // 设置添加人的id
+            hotel.setAddUserId(addAdmin.getId());
+            // 操作数据库进行添加
+            System.out.println("要新增的对象是:" + hotel);
+            Object savedHotel = hotelService.save(hotel);
+            if (savedHotel == null) {
+                return new CommonResult(304, "保存失败");
+            }
+            // 返回成功结果
+            return new CommonResult(200, "请求成功", savedHotel);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new CommonResult(500, "请求异常: " + e.getMessage());  // 返回500状态码并附带异常信息
+        }
+    }
+
+    //跳转详情页面
+    @GetMapping("hotel_toEdit/{id}")
+    public String todetail(@PathVariable("id") String id,Model model){
+        Hotel byId = hotelService.getById(id);
+        model.addAttribute("entity",byId);
+        return "hotel/hotelEdit";
+    }
+    //更新
+    @ResponseBody
+    @PostMapping("hotel_update")
+    public CommonResult update(Hotel hotel,HttpSession session){
+        try {
+            // 是数据库中原对象
+            Hotel old_hotel = hotelService.getById(hotel.getId());
+            // 如果上传了新照片，就需要删除老照片
+            // 所以if来判断旧新的图片地址是不是一样的，不一样，就删掉老照片
+            if (!hotel.getImgUrl().equals(old_hotel.getImgUrl())){
+                String realPath = ResourceUtils.getURL("classpath:").getPath();
+                String filePath = old_hotel.getImgUrl();
+                realPath = realPath.substring(1,realPath.length())+"static"+filePath;
+                File f = new File(realPath);
+                if (f.exists()){
+                    f.delete();
+                    System.out.println("删除了老照片，地址是："+realPath);
+                }
+            }
+            //设置当前系统时间
+            hotel.setModifyTime(DateUtils.getNowTime());
+            //设置新增酒店的人
+            TPzAdminUser addAdmin = (TPzAdminUser) session.getAttribute("admin");
+            if (addAdmin == null) {
+                return new CommonResult(304, "用户未登录或Session已过期");
+            }
+            // 设置添加人的id
+            hotel.setAddUserId(addAdmin.getId());
+            System.out.println("要更新的对象是："+hotel);
+            return new CommonResult(200,"请求成功",hotelService.updateById(hotel));
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"请求失败");
+        }
+    }
+
+    //删除
+    @GetMapping("hotel_delete/{id}")
+    @ResponseBody
+    public CommonResult delete(Hotel hotel,@PathVariable("id") String id){
+        // 待做.判断该酒店发布没
+        Hotel byId = hotelService.getById(id);
+        hotel.setDeleteStatus(1L);
+        hotelService.updateById(byId);
+        return new CommonResult(200,"请求成功");
+    }
+
 }
