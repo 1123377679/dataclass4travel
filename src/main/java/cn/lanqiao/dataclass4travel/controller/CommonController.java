@@ -18,5 +18,4 @@ public class CommonController {
     public String toLoginPage(){
         return "login.html";
     }
-
 }
