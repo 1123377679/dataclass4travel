@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -35,10 +36,14 @@ public class TravelRouteController {
     @RequestMapping("/travelRoute_list")
     public String list(@RequestParam(defaultValue = "1") Long pageNumber,
                        @RequestParam(defaultValue = "7") Long pageSize,
+                       @RequestParam(defaultValue = "") String title,
                        Model model){
         QueryWrapper<TCmsTravelRoute> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("DELETE_STATUS","0");
         queryWrapper.orderByDesc("ADD_TIME");
+        if (!"".equals(title)){
+            queryWrapper.like("TITLE", title);
+        }
         IPage page = tCmsTravelRouteService.page(new Page<TCmsTravelRoute>(pageNumber, pageSize), queryWrapper);
         //将page对象存入pageHelper对象中
         PageHelper<TCmsTravelRoute> pageHelper = new PageHelper<TCmsTravelRoute>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());
