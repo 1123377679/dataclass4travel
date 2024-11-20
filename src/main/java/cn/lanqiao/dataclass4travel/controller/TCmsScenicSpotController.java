@@ -14,9 +14,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Slf4j
@@ -48,22 +46,23 @@ public class TCmsScenicSpotController {
     /**
      * 02-跳转新增页面
      */
-    @RequestMapping("/scenicSpot_toadd")
+    @RequestMapping("/scenicSpot_toAdd")
     public String toAdd(){
         return "scenicSpot/scenicSpotAdd";
     }
 
-
-    @RequestMapping("/scenicSpot_add")
+    /**
+     * 03-新增(异步)
+     */
     @ResponseBody
+    @RequestMapping("/scenicSpot_add")
     public CommonResult add(TCmsScenicSpot tCmsScenicSpot, HttpSession session){
         try {
             //设置当前系统时间
             String nowTime = DateUtils.getNowTime();
             tCmsScenicSpot.setAddTime(nowTime);
             //设置添加人的id,从session中获取addUserId
-            TCmsScenicSpot admin = (TCmsScenicSpot) session.getAttribute("admin");
-            tCmsScenicSpot.setAddUserId(admin.getAddUserId());
+            tCmsScenicSpot.setAddUserId("b3o9sd7f5aS09");
             //操作数据库进行添加
             System.out.println("要新增的对象是:"+tCmsScenicSpot);
             //需要响应类
@@ -72,5 +71,37 @@ public class TCmsScenicSpotController {
             e.printStackTrace();
             return new CommonResult(304,"请求异常");
         }
+    }
+
+
+    /**
+     * 04-跳转详情
+     */
+    @GetMapping("/scenicSpot_View/{id}")
+    public String todetail(@PathVariable("id") String id, Model model){
+        TCmsScenicSpot ById = tCmsScenicSpotService.getById(id);
+        model.addAttribute("entity", ById);
+        return "scenicSpot/scenicSpotView";
+    }
+
+    /**
+     * 05-跳转更新
+     */
+    @GetMapping("/scenicSpot_toEdit/{id}")
+    public String toEdit(@PathVariable("id") String id, Model model){
+        TCmsScenicSpot ById = tCmsScenicSpotService.getById(id);
+        model.addAttribute("entity", ById);
+        return "scenicSpot/scenicSpotEdit";
+    }
+
+    /**
+     * 06-删除
+     */
+    @GetMapping("/scenicSpot_delete/{id}")
+    public CommonResult delete(@PathVariable("id") String id){
+        TCmsScenicSpot ById = tCmsScenicSpotService.getById(id);
+        ById.setDeleteStatus(1L);
+        tCmsScenicSpotService.updateById(ById);
+        return new CommonResult(200, "请求成功");
     }
 }
