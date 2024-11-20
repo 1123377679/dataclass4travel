@@ -61,7 +61,7 @@ public class TYwOrderController {
     @PostMapping("/userOrder_update")
     @ResponseBody
     public CommonResult  updateOrder(TYwOrder order) {
-
+        System.out.println("收到的要求内容: " + order.getRequirement());
         return new CommonResult(200,"请求成功",tYwOrderService.updateById(order));
 
         }

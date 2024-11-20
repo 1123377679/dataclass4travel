@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 
 
 public class TCmsStrategy implements Serializable {
+
     /**
      * 主键
      */
@@ -36,12 +37,12 @@ public class TCmsStrategy implements Serializable {
     /**
      * 添加时间
      */
-    private Date addTime;
+    private String addTime;
 
     /**
      * 删除标志
      */
-    private Integer deleteStatus;
+    private long deleteStatus;
 
     /**
      * 修改人ID
@@ -51,7 +52,7 @@ public class TCmsStrategy implements Serializable {
     /**
      * 修改时间
      */
-    private Date modifyTime;
+    private String modifyTime;
 
     /**
      * logo图片地址

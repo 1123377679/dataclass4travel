@@ -11,6 +11,10 @@
 	<meta name="format-detection" content="telephone=no"/>
 	<link rel="stylesheet" href="/layui/css/layui.css" media="all" />
 	<link rel="stylesheet" href="/css/font_eolqem241z66flxr.css" media="all"/>
+	<!-- 富文本编辑器 -->
+	<link rel="stylesheet" href="/js/new/kindeditor/themes/default/default.css"/>
+	<script charset="utf-8" src="/js/new/kindeditor/kindeditor-all-min.js"></script>
+	<script charset="utf-8" src="/js/new/kindeditor/lang/zh-CN.js"></script>
 </head>
 <body class="childrenBody">
 	<form class="layui-form" id="updateForm">
@@ -93,8 +97,9 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">特殊要求</label>
 			<div class="layui-input-block">
-				<textarea class="layui-textarea" th:text="${entity.requirement}" id="requirement" name="requirement" lay-verify="content" placeholder="请输入特殊要求"></textarea>
+				<textarea  style="width:1200px;height:400px;visibility:hidden;" id="requirement" lay-verify="content"></textarea>
 			</div>
+		</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">状态</label>
@@ -119,23 +124,37 @@
 	<script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
 
 	<script type="text/javascript">
-
+		//初始化kindEditor编辑器
+		var editor;
+		KindEditor.ready(function (K) {
+			editor = K.create('textarea', {
+				//指定上传文件参数名称等同于<input name="file">属性
+				filePostName  : "file",
+				//指定上传文件请求的url
+				uploadJson : '/uploadimg_kindeditor/order',  //上传后台地址,这个文件上传的地址需要自定义修改！！！
+				//上传类型，分别为image、flash、media、file
+				dir : "image",
+				//否允许浏览服务器已上传文件,默认是false
+				allowFileManager: true
+			});
+		});
 		//更新旅游路线
 		function userOrder_update() {
-			//表单序列化作用，获取表单中的数据
-			var datas=$("#updateForm").serialize();
-			//alert(datas);
-			$.post("/userOrder_update",datas,function (result) {
-				if(result.code==200){
-					layer.msg('更新成功', {
-						time: 2000, //2s后自动关闭
-					},function () {
-						location.href="/userOrder_list";
+			// 获取富文本编辑器中的内容
+			var content = editor.html();  // 获取编辑器中的HTML内容
+			var datas = $("#updateForm").serialize();  // 获取表单序列化数据
+
+			// 将富文本内容追加到表单数据中
+			datas += '&requirement=' + encodeURIComponent(content);  // 添加特殊要求内容
+
+			// 提交表单数据
+			$.post("/userOrder_update", datas, function(result) {
+				if (result.code == 200) {
+					layer.msg('更新成功', {time: 2000}, function() {
+						location.href = "/userOrder_list";
 					});
-				}else{
-					layer.msg('更新异常', {
-						time: 2000, //2s后自动关闭
-					});
+				} else {
+					layer.msg('更新异常', {time: 2000});
 				}
 			});
 		}
