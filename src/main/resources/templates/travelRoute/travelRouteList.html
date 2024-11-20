@@ -66,11 +66,13 @@
                 <td th:if="${var.state==1}">已发布</td>
                 <td th:if="${var.state==2}">已撤销</td>
                 <td th:if="${var.state==''}"></td>
+<!--                th:href="|/travelRoute_todetail/${var.id}|"-->
                 <td>
                     <a class="layui-btn layui-btn-xs" th:href="|/travelRoute_todetail/${var.id}|">
                         <i class="layui-icon">&#xe60a;</i>
                     </a>
-                    <a class="layui-btn layui-btn-xs layui-btn-normal" th:href="|/travelRoute_toEdit/${var.id}|">
+                    <a class="layui-btn layui-btn-xs layui-btn-normal" th:if="${var.id != 'b496894b89754a848e9b74ff66a05d44'}"
+                       th:href="|/travelRoute_toEdit/${var.id}|">
                         <i class="layui-icon">&#xe642;</i>
                     </a>
                     <a class="layui-btn layui-btn-xs layui-btn-danger"
