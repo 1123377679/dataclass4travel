@@ -19,9 +19,9 @@
         <div class="layui-inline">
             <div class="layui-input-inline">
                 <input type="text" name="title" th:value="${title}" placeholder="请输入标题"
-                       class="layui-input search_input"/>
+                       class="layui-input search_input" id="searchInput"/>
             </div>
-            <button class="layui-btn search_btn" type="submit">查询</button>
+            <button class="layui-btn search_btn"  type="submit">查询</button>
         </div>
         <div class="layui-inline">
             <a class="layui-btn layui-btn-normal newsAdd_btn">添加旅游路线</a>
@@ -157,7 +157,26 @@
             });
 		});
 	}
-
+    //模糊查询
+    $(document).ready(function(){
+        $('#searchButton').click(function(){
+            var title = $('#searchInput').val();
+            $.get('/search/{title}', {title: title}, function(data) {
+                // 处理返回结果，这里假设结果是一个HTML字符串
+                $('#resultArea').html(data);
+            });
+        });
+    });
+    //模糊查询
+    // function search() {
+    //     var title = $('#titleInput').val();
+    //     location.href="/travelRoute_list?title="+title;
+    // }
+    // //分页
+    // function page(pageNum) {
+    //     var pageSize = $('#pageSize').val();
+    //     location.href="/travelRoute_list?pageNum="+pageNum+"&pageSize="+pageSize;
+    // }
 </script>
 </body>
 </html>
