@@ -1,6 +1,8 @@
 package cn.lanqiao.dataclass4travel.pojo;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,12 +15,13 @@ import lombok.NoArgsConstructor;
 //1
 public class TCmsInsurance {
 
+  @TableId(type = IdType.ASSIGN_UUID)
   private String id;
   private String addUserId;
-  private java.sql.Timestamp addTime;
+  private String addTime;
   private long deleteStatus;
   private String modifyUserId;
-  private java.sql.Timestamp modifyTime;
+  private String modifyTime;
   private String title;
   private long insuranceCompany;
   private double price;
