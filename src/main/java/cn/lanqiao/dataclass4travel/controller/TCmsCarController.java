@@ -9,11 +9,15 @@ import cn.lanqiao.dataclass4travel.utils.PageHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
 
 @Controller
 @Slf4j
@@ -37,7 +41,7 @@ public class TCmsCarController {
             //设置当前系统时间
             tCmsCar.setAddTime(DateUtils.getNowTime());
 
-            tCmsCar.setAddUserId("1");
+            tCmsCar.setAddUserId("b496894b89754a848e9b74ff66a05d44");
             //操作数据库进行添加
             log.info("新增车票信息："+tCmsCar);
             //需要响应类
@@ -68,6 +72,42 @@ public class TCmsCarController {
     }
 
 
+
+    /*更新车票功能（异步更新）*/
+    @RequestMapping("/car_update")
+    @ResponseBody
+    public CommonResult update(TCmsCar tCmsCar, HttpSession session){
+
+
+        try{
+            //对象是数据库中原来的对象
+            TCmsCar old_byId = tCmsCarService.getById(tCmsCar.getId());
+
+            if (!tCmsCar.getImgUrl().equals(old_byId.getImgUrl())){
+                //如果修改了图片，则删除原来的图片
+                String realPath = ResourceUtils.getURL("classpath:").getPath();
+                String filePath = old_byId.getImgUrl();
+                realPath = realPath.substring(1,realPath.length())+"static"+filePath;
+                File file = new File(realPath);
+                if(file.exists()){
+                    file.delete();
+                    System.out.println("删除了旧照片，地址是："+realPath);
+                }
+            }
+
+            //设置当前系统时间为更新时间
+            tCmsCar.setModifyTime(DateUtils.getNowTime());
+
+            tCmsCar.setModifyUserId("b496894b89754a848e9b74ff66a05d44");
+            System.out.println("要更新的对象是："+tCmsCar);
+            return new CommonResult(200,"请求成功",tCmsCarService.updateById(tCmsCar));
+        } catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"请求失败");
+        }
+
+    }
+
     /*删除车票功能*/
     //根据id删除
     @GetMapping("/car_delete/{id}")
@@ -92,10 +132,18 @@ public class TCmsCarController {
         QueryWrapper<TCmsCar> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("DELETE_STATUS","0");
         queryWrapper.orderByDesc("ADD_TIME");
+        //条件查询
+//        if (!"".equals(title)){
+//            queryWrapper.like("TITLE", title);
+//        }
         IPage page = tCmsCarService.page(new Page<TCmsCar>(pageNumber, pageSize), queryWrapper);
         //将page对象存入pageHelper对象中
         PageHelper<TCmsCar> pageHelper = new PageHelper<TCmsCar>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());
         model.addAttribute("pagerHelper", pageHelper);
         return "car/carList";
     }
+
+
+
+
 }

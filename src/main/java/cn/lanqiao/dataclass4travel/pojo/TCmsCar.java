@@ -2,6 +2,7 @@ package cn.lanqiao.dataclass4travel.pojo;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -14,6 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName("t_cms_car")
 public class TCmsCar {
+
+  private static final long serialVersionUID = 1L;
+
   //雪花算法
   @TableId(type = IdType.ASSIGN_UUID)
   private String id;
@@ -22,6 +26,8 @@ public class TCmsCar {
   private long deleteStatus;
   private String modifyUserId;
   private String modifyTime;
+
+  @TableField("TITLE")
   private String title;
   private String startPlace;
   private String endPlace;
