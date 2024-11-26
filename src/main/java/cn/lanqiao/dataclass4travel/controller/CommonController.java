@@ -18,4 +18,31 @@ public class CommonController {
     public String toLoginPage(){
         return "login.html";
     }
+
+    /**
+     * 跳转用户首页
+     * @return
+     */
+    @RequestMapping("/index")
+    public String toIndexPage(){
+        return "portal/index.html";
+    }
+
+    /**
+     * 跳转用户登录界面
+     * @return
+     */
+    @RequestMapping("/user_tologin")
+    public String toUserLogin(){
+        return "portal/login.html";
+    }
+
+    /**
+     * 跳转用户注册界面
+     * @return
+     */
+    @RequestMapping("/user_toregister")
+    public String toUserRegister(){
+        return "portal/register.html";
+    }
 }
