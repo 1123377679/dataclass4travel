@@ -45,12 +45,6 @@ public class CaptchaController {
             // 获取类路径下的文件资源
             Resource resource = resourceLoader.getResource(imagePath);
             File file = resource.getFile();
-            System.out.println("文件路径：" + file.getAbsolutePath());
-            // 确保目标目录存在
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-
             // 将验证码图片写入到文件
             File captchaFile = new File(file, fileName);
             FileOutputStream fos = new FileOutputStream(captchaFile);
