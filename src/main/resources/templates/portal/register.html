@@ -50,13 +50,12 @@
                     type: "POST",
                     data: jQuery(this).serialize(),
                     success: function(response) {
-                        if (response.success) {
+                        if (response.code === 200) {
                             alert("注册成功")
                             // 可以跳转到其他页面
                             window.location.href = "/index";
-
                         } else {
-                            alert(response.msg);
+                            alert("注册失败");
                         }
                     },
                     error: function() {
@@ -65,9 +64,6 @@
                 });
             });
         });
-        function jump() {
-            window.location.href = "/user_tologin";
-        }
     </script>
 </head>
 <body>
