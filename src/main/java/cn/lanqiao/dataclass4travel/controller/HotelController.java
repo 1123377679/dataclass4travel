@@ -2,6 +2,7 @@ package cn.lanqiao.dataclass4travel.controller;
 
 import cn.lanqiao.dataclass4travel.mapper.HotelMapper;
 import cn.lanqiao.dataclass4travel.pojo.Hotel;
+import cn.lanqiao.dataclass4travel.pojo.TCmsStrategy;
 import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.service.HotelService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
@@ -137,6 +138,13 @@ public class HotelController {
         hotel.setDeleteStatus(1L);
         hotelService.updateById(byId);
         return new CommonResult(200,"请求成功");
+    }
+    //查看详情
+    @GetMapping("/hotel_todetail/{id}")
+    public String toDetail(@PathVariable("id") String id,Model model){
+        Hotel byId = hotelService.getById(id);
+        model.addAttribute("entity",byId);
+        return "hotel/hotelView";
     }
 
 }
