@@ -127,15 +127,16 @@ public class TCmsCarController {
     @RequestMapping("/car_list")
     public String list(@RequestParam(defaultValue = "1") Long pageNumber,
                        @RequestParam(defaultValue = "7") Long pageSize,
+                       @RequestParam(defaultValue = "") String title,
                        Model model){
         //构造条件
         QueryWrapper<TCmsCar> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("DELETE_STATUS","0");
         queryWrapper.orderByDesc("ADD_TIME");
         //条件查询
-//        if (!"".equals(title)){
-//            queryWrapper.like("TITLE", title);
-//        }
+        if (!"".equals(title)){
+            queryWrapper.like("TITLE", title);
+        }
         IPage page = tCmsCarService.page(new Page<TCmsCar>(pageNumber, pageSize), queryWrapper);
         //将page对象存入pageHelper对象中
         PageHelper<TCmsCar> pageHelper = new PageHelper<TCmsCar>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());

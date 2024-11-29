@@ -11,6 +11,10 @@
 	<meta name="format-detection" content="telephone=no"/>
 	<link rel="stylesheet" href="/js/layui/css/layui.css" media="all" />
 	<link rel="stylesheet" href="/css/font_eolqem241z66flxr.css" media="all"/>
+	<!-- 富文本编辑器 -->
+	<link rel="stylesheet" href="/js/new/kindeditor/themes/default/default.css"/>
+	<script charset="utf-8" src="/js/new/kindeditor/kindeditor-all-min.js"></script>
+	<script charset="utf-8" src="/js/new/kindeditor/lang/zh-CN.js"></script>
 </head>
 <body class="childrenBody">
 	<form class="layui-form" id="addForm">
@@ -36,7 +40,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">出团时间</label>
 			<div class="layui-input-inline">
-				<input  type="text" class="layui-input" id="startDateAndTime" name="startDateAndTime" lay-verify="date"onclick="layui.laydate({elem:this,type: 'date' })" />
+				<input  type="text" class="layui-input" id="startDateAndTime" name="startDateAndTime" lay-verify="date" onclick="layui.laydate({elem:this,type: 'date' })" placeholder="请输入出团时间"/>
 			</div>
 		</div>
 		<div class="layui-form-item">
@@ -76,11 +80,12 @@
 				<input type="hidden" name="imgUrl" id="imgUrl"/>
 			</div>
 		</div>
+
 	   </div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">备注</label>
 			<div class="layui-input-block">
-				<textarea class="layui-textarea" id="remark" name="remark" lay-verify="required" placeholder="请输入备注"></textarea>
+				<textarea  style="width:1200px;height:400px;visibility:hidden;" id="requirement" lay-verify="content"></textarea>
 			</div>
 		</div>
 		<div class="layui-form-item">
@@ -105,6 +110,21 @@
 	<script type="text/javascript" src="/js/car/carEdit.js"></script>
 	<script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
 	<script type="text/javascript">
+
+		//初始化kindEditor编辑器
+		var editor;
+		KindEditor.ready(function (K) {
+			editor = K.create('textarea', {
+				//指定上传文件参数名称等同于<input name="file">属性
+				filePostName  : "file",
+				//指定上传文件请求的url
+				uploadJson : '/uploadimg_kindeditor/car',  //上传后台地址,这个文件上传的地址需要自定义修改！！！
+				//上传类型，分别为image、flash、media、file
+				dir : "image",
+				//否允许浏览服务器已上传文件,默认是false
+				allowFileManager: true
+			});
+		});
 
 		//新增car
 		function car_add() {

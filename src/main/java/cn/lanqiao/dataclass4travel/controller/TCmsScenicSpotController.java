@@ -1,5 +1,11 @@
 package cn.lanqiao.dataclass4travel.controller;
 
+import cn.lanqiao.dataclass4travel.mapper.TCmsScenicSpotMapper;
+import cn.lanqiao.dataclass4travel.pojo.Hotel;
+import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
+import cn.lanqiao.dataclass4travel.utils.CommonResult;
+import cn.lanqiao.dataclass4travel.utils.DateUtils;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import cn.lanqiao.dataclass4travel.pojo.TCmsScenicSpot;
@@ -10,8 +16,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
 
 @Controller
 @Slf4j
@@ -20,6 +28,9 @@ public class TCmsScenicSpotController {
     @Autowired
     private TCmsScenicSpotService tCmsScenicSpotService;
 
+    @Autowired
+    private TCmsScenicSpotMapper tCmsScenicSpotMapper;
+
     /**
      * 01-分页查询
      */
@@ -27,7 +38,7 @@ public class TCmsScenicSpotController {
     public String list(@RequestParam(defaultValue = "1") Long pageNumber,
                        @RequestParam(defaultValue = "7") Long pageSize,
                        Model model){
-        QueryWrapper<TCmsScenicSpot> queryWrapper=new QueryWrapper<>();
+        QueryWrapper<TCmsScenicSpot> queryWrapper=new QueryWrapper();
         queryWrapper.eq("DELETE_STATUS",0);
         queryWrapper.orderByDesc("ADD_TIME");
         IPage page = tCmsScenicSpotService.page(new Page<TCmsScenicSpot>(pageNumber, pageSize), queryWrapper);
@@ -40,8 +51,101 @@ public class TCmsScenicSpotController {
     /**
      * 02-跳转新增页面
      */
-    @RequestMapping("/scenicSpot_toadd")
+    @RequestMapping("/scenicSpot_toAdd")
     public String toAdd(){
-        return "admin/scenicSpotAdd";
+        return "scenicSpot/scenicSpotAdd";
+    }
+
+    /**
+     * 03-新增(异步)
+     */
+    @ResponseBody
+    @RequestMapping("/scenicSpot_add")
+    public CommonResult add(TCmsScenicSpot tCmsScenicSpot, HttpSession session){
+        try {
+            //设置当前系统时间
+            String nowTime = DateUtils.getNowTime();
+            tCmsScenicSpot.setAddTime(nowTime);
+            //设置添加人的id,从session中获取addUserId
+            tCmsScenicSpot.setAddUserId("b3o9sd7f5aS09");
+            //操作数据库进行添加
+            System.out.println("要新增的对象是:"+tCmsScenicSpot);
+            //需要响应类
+            return new CommonResult(200,"请求成功",tCmsScenicSpotService.save(tCmsScenicSpot));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new CommonResult(304,"请求异常");
+        }
+    }
+
+
+    /**
+     * 04-跳转详情
+     */
+    @GetMapping("/scenicSpot_View/{id}")
+    public String todetail(@PathVariable("id") String id, Model model){
+        TCmsScenicSpot ById = tCmsScenicSpotService.getById(id);
+        model.addAttribute("entity", ById);
+        return "scenicSpot/scenicSpotView";
+    }
+
+    /**
+     * 05-跳转更新
+     */
+    @GetMapping("/scenicSpot_toupdate/{id}")
+    public String toEdit(@PathVariable("id") String id, Model model){
+        TCmsScenicSpot ById = tCmsScenicSpotService.getById(id);
+        model.addAttribute("entity", ById);
+        return "scenicSpot/scenicSpotEdit";
+    }
+
+    /**
+     * 06-更新
+     */
+    @ResponseBody
+    @PostMapping("/scenicSpot_update")
+    public CommonResult update(TCmsScenicSpot tCmsScenicSpot, HttpSession session){
+        try {
+            // 是数据库中原对象
+            TCmsScenicSpot old_tCmsScenicSpot = tCmsScenicSpotService.getById(tCmsScenicSpot.getId());
+            // 如果上传了新照片，就需要删除老照片
+            // 所以if来判断旧新的图片地址是不是一样的，不一样，就删掉老照片
+            if (!tCmsScenicSpot.getImgUrl().equals(old_tCmsScenicSpot.getImgUrl())){
+                String realPath = ResourceUtils.getURL("classpath:").getPath();
+                String filePath = old_tCmsScenicSpot.getImgUrl();
+                realPath = realPath.substring(1,realPath.length())+"static"+filePath;
+                File f = new File(realPath);
+                if (f.exists()){
+                    f.delete();
+                    System.out.println("删除了老照片，地址是："+realPath);
+                }
+            }
+            //设置当前系统时间
+            tCmsScenicSpot.setModifyTime(DateUtils.getNowTime());
+            //设置新增酒店的人
+            TPzAdminUser addAdmin = (TPzAdminUser) session.getAttribute("admin");
+            if (addAdmin == null) {
+                return new CommonResult(304, "用户未登录或Session已过期");
+            }
+            // 设置添加人的id
+            tCmsScenicSpot.setAddUserId(addAdmin.getId());
+            System.out.println("要更新的对象是："+tCmsScenicSpot);
+            return new CommonResult(200,"请求成功",tCmsScenicSpotService.updateById(tCmsScenicSpot));
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"请求失败");
+        }
+    }
+
+    /**
+     * 07-删除
+     */
+    @GetMapping("/scenicSpot_delete/{id}")
+    public CommonResult delete(@PathVariable("id") String id){
+        TCmsScenicSpot ById = tCmsScenicSpotService.getById(id);
+        ById.setDeleteStatus(1L);
+        tCmsScenicSpotService.updateById(ById);
+        return new CommonResult(200, "请求成功");
     }
 }

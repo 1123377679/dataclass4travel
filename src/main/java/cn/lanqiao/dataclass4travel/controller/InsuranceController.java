@@ -1,6 +1,8 @@
 package cn.lanqiao.dataclass4travel.controller;
 
 
+import cn.lanqiao.dataclass4travel.pojo.Hotel;
+import cn.lanqiao.dataclass4travel.pojo.TCmsCar;
 import cn.lanqiao.dataclass4travel.pojo.TCmsInsurance;
 import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.service.InsuranceService;
@@ -15,7 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
 
 @Controller
 @Slf4j
@@ -89,6 +94,72 @@ public class InsuranceController {
     public String edit(@PathVariable String id, Model model){
         TCmsInsurance insurance = insuranceService.getById(id);
         model.addAttribute("entity",insurance);
+        return "insurance/insuranceView";
+    }
+
+    /**
+     * 更新页面
+     */
+    @GetMapping("/insurance_toEdit/{id}")
+    public String toEdit(@PathVariable("id") String id,Model model) {
+        //获取id
+        TCmsInsurance byId = insuranceService.getById(id);
+        //回显数据的对象
+        model.addAttribute("entity",byId);
         return "insurance/insuranceEdit";
+    }
+    /**
+     * 更新异步
+     * */
+    @PostMapping("/insurance_update")
+    @ResponseBody
+    public CommonResult edit(TCmsInsurance tCmsInsurance, HttpSession session){
+        try {
+            // 是数据库中原对象
+            TCmsInsurance byId = insuranceService.getById(tCmsInsurance.getId());
+            // 如果上传了新照片，就需要删除老照片
+            // 所以if来判断旧新的图片地址是不是一样的，不一样，就删掉老照片
+            if (!tCmsInsurance.getImgUrl().equals(byId.getImgUrl())){
+                String realPath = ResourceUtils.getURL("classpath:").getPath();
+                String filePath = byId.getImgUrl();
+                realPath = realPath.substring(1,realPath.length())+"static"+filePath;
+                File f = new File(realPath);
+                if (f.exists()){
+                    f.delete();
+                    System.out.println("删除了老照片，地址是："+realPath);
+                }
+            }
+            //设置当前系统时间
+            byId.setModifyTime(DateUtils.getNowTime());
+            //设置新增酒店的人
+            TPzAdminUser addAdmin = (TPzAdminUser) session.getAttribute("admin");
+            if (addAdmin == null) {
+                return new CommonResult(304, "用户未登录或Session已过期");
+            }
+            // 设置添加人的id
+            byId.setAddUserId(addAdmin.getId());
+            System.out.println("要更新的对象是："+byId);
+            return new CommonResult(200,"请求成功",insuranceService.updateById(tCmsInsurance));
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new CommonResult(500,"请求失败");
+        }
+    }
+
+    /**
+     * 删除保险功能
+     * 根据id删除
+     */
+    @GetMapping("/insurance_delete/{id}")
+    @ResponseBody
+    public CommonResult delete(@PathVariable("id") String id){
+        //补代码时需要判断这个车票是否在使用，如果在使用要提示暂时不能删除
+        TCmsInsurance byId = insuranceService.getById(id);
+        byId.setDeleteStatus(1L);//删除状态
+        insuranceService.updateById(byId);
+        log.info("删除车票信息",id);
+        insuranceService.updateById(byId);
+        return new CommonResult(200,"请求成功");
     }
 }
