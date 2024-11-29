@@ -131,4 +131,27 @@ public class TravelRouteController {
             return new CommonResult(500,"请求失败");
         }
     }
+
+
+
+    //前台用户登录的网页
+    //跳转到路线页面
+    //实现分页查询
+    @RequestMapping("/portal_travelRoute_list")
+    public String portalList(@RequestParam(defaultValue = "1") Long pageNumber,
+                       @RequestParam(defaultValue = "7") Long pageSize,
+                       @RequestParam(defaultValue = "") String title,
+                       Model model){
+        QueryWrapper<TCmsTravelRoute> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("DELETE_STATUS","0");
+        queryWrapper.orderByDesc("ADD_TIME");
+        if (!"".equals(title)){
+            queryWrapper.like("TITLE", title);
+        }
+        IPage page = tCmsTravelRouteService.page(new Page<TCmsTravelRoute>(pageNumber, pageSize), queryWrapper);
+        //将page对象存入pageHelper对象中
+        PageHelper<TCmsTravelRoute> pageHelper = new PageHelper<TCmsTravelRoute>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());
+        model.addAttribute("pagerHelper", pageHelper);
+        return "/portal/travelRoute";
+    }
 }
