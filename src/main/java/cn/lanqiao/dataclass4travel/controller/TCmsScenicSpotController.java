@@ -67,7 +67,13 @@ public class TCmsScenicSpotController {
             String nowTime = DateUtils.getNowTime();
             tCmsScenicSpot.setAddTime(nowTime);
             //设置添加人的id,从session中获取addUserId
-            tCmsScenicSpot.setAddUserId("b3o9sd7f5aS09");
+            // 获取当前管理员信息
+            TPzAdminUser addAdmin = (TPzAdminUser) session.getAttribute("admin");
+            // 账号登录检测
+            if (addAdmin == null) {
+                return new CommonResult(304, "用户未登录或Session已过期");
+            }
+            tCmsScenicSpot.setAddUserId(addAdmin.getId());
             //操作数据库进行添加
             System.out.println("要新增的对象是:"+tCmsScenicSpot);
             //需要响应类
@@ -85,7 +91,11 @@ public class TCmsScenicSpotController {
     @GetMapping("/scenicSpot_View/{id}")
     public String todetail(@PathVariable("id") String id, Model model){
         TCmsScenicSpot ById = tCmsScenicSpotService.getById(id);
-        model.addAttribute("entity", ById);
+        if (ById != null) {
+            model.addAttribute("entity", ById);
+        }else {
+            model.addAttribute("error", "账号未登录");
+        }
         return "scenicSpot/scenicSpotView";
     }
 
