@@ -1,7 +1,6 @@
 package cn.lanqiao.dataclass4travel.controller;
 
 import cn.lanqiao.dataclass4travel.mapper.TCmsScenicSpotMapper;
-import cn.lanqiao.dataclass4travel.pojo.Hotel;
 import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
@@ -27,9 +26,6 @@ public class TCmsScenicSpotController {
 
     @Autowired
     private TCmsScenicSpotService tCmsScenicSpotService;
-
-    @Autowired
-    private TCmsScenicSpotMapper tCmsScenicSpotMapper;
 
     /**
      * 01-分页查询
