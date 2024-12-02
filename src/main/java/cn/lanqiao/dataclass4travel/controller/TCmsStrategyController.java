@@ -5,6 +5,7 @@ import cn.lanqiao.dataclass4travel.mapper.TCmsStrategyMapper;
 
 
 import cn.lanqiao.dataclass4travel.pojo.TCmsStrategy;
+
 import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.service.TCmsStrategyService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
@@ -42,7 +43,7 @@ public class TCmsStrategyController {
         QueryWrapper<TCmsStrategy> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("DELETE_STATUS", 0);
         queryWrapper.orderByDesc("ADD_TIME");
-        IPage page = tCmsStrategyService.page(new Page<TCmsStrategy>(pageNumber, pageSize),queryWrapper);
+        IPage page = tCmsStrategyService.page(new Page<TCmsStrategy>(pageNumber, pageSize), queryWrapper);
 
         PageHelper<TCmsStrategy> strategyPageHelper = new PageHelper<TCmsStrategy>(pageNumber, pageSize, page.getPages(), page.getTotal(), page.getRecords());
         model.addAttribute("pagerHelper", strategyPageHelper);
@@ -51,13 +52,13 @@ public class TCmsStrategyController {
     }
 
     @RequestMapping("/strategy_toAdd")
-    public String toAdd(){
+    public String toAdd() {
         return "strategy/strategyAdd";
     }
 
     @PostMapping("/strategy_Add")
     @ResponseBody
-    public CommonResult add(TCmsStrategy tCmsStrategy, HttpSession session){
+    public CommonResult add(TCmsStrategy tCmsStrategy, HttpSession session) {
         try {
 
             String nowTime = DateUtils.getNowTime();
@@ -83,37 +84,37 @@ public class TCmsStrategyController {
             return new CommonResult(500, "请求异常: " + e.getMessage());  // 返回500状态码并附带异常信息
         }
     }
+
     @GetMapping("/strategy_View/{id}")
-    public String toDetail(@PathVariable("id") String id,Model model){
+    public String toDetail(@PathVariable("id") String id, Model model) {
         TCmsStrategy byId = tCmsStrategyService.getById(id);
-        model.addAttribute("entity",byId);
+        model.addAttribute("entity", byId);
         return "strategy/strategyView";
     }
 
     @GetMapping("/strategy_toupdate/{id}")
-    public String toEdit(@PathVariable("id") String id,Model model){
+    public String toEdit(@PathVariable("id") String id, Model model) {
         TCmsStrategy byId = tCmsStrategyService.getById(id);
-        model.addAttribute("entity",byId);
+        model.addAttribute("entity", byId);
         return "strategy/strategyEdit";
     }
 
-
     @ResponseBody
     @PostMapping("strategy_update")
-    public CommonResult update(TCmsStrategy tCmsStrategy,HttpSession session){
+    public CommonResult update(TCmsStrategy tCmsStrategy, HttpSession session) {
         try {
             // 是数据库中原对象
             TCmsStrategy old = tCmsStrategyService.getById(tCmsStrategy.getId());
             // 如果上传了新照片，就需要删除老照片
             // 所以if来判断旧新的图片地址是不是一样的，不一样，就删掉老照片
-            if (!tCmsStrategy.getImgUrl().equals(old.getImgUrl())){
+            if (!tCmsStrategy.getImgUrl().equals(old.getImgUrl())) {
                 String realPath = ResourceUtils.getURL("classpath:").getPath();
                 String filePath = old.getImgUrl();
-                realPath = realPath.substring(1,realPath.length())+"static"+filePath;
+                realPath = realPath.substring(1, realPath.length()) + "static" + filePath;
                 File f = new File(realPath);
-                if (f.exists()){
+                if (f.exists()) {
                     f.delete();
-                    System.out.println("删除了老图片，地址是："+realPath);
+                    System.out.println("删除了老图片，地址是：" + realPath);
                 }
             }
             //设置当前系统时间
@@ -124,21 +125,68 @@ public class TCmsStrategyController {
             }
             // 设置添加人的id
             tCmsStrategy.setAddUserId(addAdmin.getId());
-            System.out.println("要更新的对象是："+tCmsStrategy);
-            return new CommonResult(200,"请求成功",tCmsStrategyService.updateById(tCmsStrategy));
+            System.out.println("要更新的对象是：" + tCmsStrategy);
+            return new CommonResult(200, "请求成功", tCmsStrategyService.updateById(tCmsStrategy));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return new CommonResult(500,"请求失败");
+            return new CommonResult(500, "请求失败");
+
         }
     }
+
     @GetMapping("strategy_delete/{id}")
     @ResponseBody
-    public CommonResult delete(TCmsStrategy tCmsStrategy,@PathVariable("id") String id){
+    public CommonResult delete(TCmsStrategy tCmsStrategy, @PathVariable("id") String id) {
 
         TCmsStrategy byId = tCmsStrategyService.getById(id);
         tCmsStrategy.setDeleteStatus(1L);
         tCmsStrategyService.updateById(byId);
-        return new CommonResult(200,"请求成功");
+        return new CommonResult(200, "请求成功");
+
+    }
+
+
+    @RequestMapping("/portal_strategy_list")
+    public String portalList(@RequestParam(defaultValue = "1") Long pageNumber,
+                             @RequestParam(defaultValue = "7") Long pageSize,
+                             @RequestParam(defaultValue = "") String title,
+                             Model model) {
+        QueryWrapper<TCmsStrategy> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("DELETE_STATUS", "0");
+        queryWrapper.orderByDesc("ADD_TIME");
+        if (!"".equals(title)) {
+            queryWrapper.like("TITLE", title);
+        }
+        IPage page = tCmsStrategyService.page(new Page<TCmsStrategy>(pageNumber, pageSize), queryWrapper);
+        //将page对象存入pageHelper对象中
+        PageHelper<TCmsStrategy> pageHelper = new PageHelper<TCmsStrategy>(pageNumber, pageSize, page.getPages(), page.getTotal(), page.getRecords());
+        model.addAttribute("pagerHelper", pageHelper);
+        return "portal/strategy";
+    }
+
+
+    @GetMapping("/portal_strategy_view/{id}")
+    public String toview(@PathVariable("id") String id, Model model) {
+        TCmsStrategy byId = tCmsStrategyService.getById(id);
+        model.addAttribute("entity", byId);
+        return "portal/strategyView";
+    }
+
+    @RequestMapping("/strategy")
+    public String tostrategy(@RequestParam(defaultValue = "1") long pageNumber,
+                             @RequestParam(defaultValue = "7") long pageSize,
+                             Model model) {
+        // 构造查询条件
+        QueryWrapper<TCmsStrategy> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("DELETE_STATUS", 0);  // 确保查询条件正确
+        queryWrapper.orderByDesc("ADD_TIME");
+        // 调用 service 层的分页查询方法
+        IPage page = tCmsStrategyService.page(new Page<TCmsStrategy>(pageNumber, pageSize), queryWrapper);
+        // 包装分页信息
+        PageHelper<TCmsStrategy> PageHelper = new PageHelper<TCmsStrategy>(pageNumber, pageSize, page.getPages(), page.getTotal(), page.getRecords());
+        // 将分页数据传递给前端页面
+        model.addAttribute("pagerHelper", PageHelper);
+        return "portal/strategy";  // 返回视图    }
     }
 }
