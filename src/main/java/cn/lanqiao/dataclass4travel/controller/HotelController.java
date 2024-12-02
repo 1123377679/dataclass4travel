@@ -146,5 +146,21 @@ public class HotelController {
         model.addAttribute("entity",byId);
         return "hotel/hotelView";
     }
-
+//     前台
+    @RequestMapping("/portal_hotel_list")
+    public String sceniclist(@RequestParam(defaultValue = "1") long pageNumber,
+                       @RequestParam(defaultValue = "7") long pageSize,
+                       Model model) {
+        // 构造查询条件
+        QueryWrapper<Hotel> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("DELETE_STATUS", 0);  // 确保查询条件正确
+        queryWrapper.orderByDesc("ADD_TIME");
+        // 调用 service 层的分页查询方法
+        IPage page = hotelService.page(new Page<Hotel>(pageNumber, pageSize), queryWrapper);
+        // 包装分页信息
+        PageHelper<Hotel> hotelPageHelper = new PageHelper<Hotel>(pageNumber, pageSize, page.getPages(), page.getTotal(),page.getRecords());
+        // 将分页数据传递给前端页面
+        model.addAttribute("pagerHelper", hotelPageHelper);
+        return "portal/hotelAccommodation";  // 返回视图
+    }
 }
