@@ -3,6 +3,7 @@ package cn.lanqiao.dataclass4travel.controller;
 import cn.lanqiao.dataclass4travel.pojo.TCmsTravelRoute;
 import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.service.TCmsTravelRouteService;
+import cn.lanqiao.dataclass4travel.service.TPzAdminUserService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
@@ -22,20 +23,27 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 @Controller
 @Slf4j
 public class TravelRouteController {
     @Autowired
     private TCmsTravelRouteService tCmsTravelRouteService;
+    @Autowired
+    private TPzAdminUserService tPzAdminUserService;
     /*车票分页查询*/
     @RequestMapping("/travelRoute_list")
     public String list(@RequestParam(defaultValue = "1") Long pageNumber,
                        @RequestParam(defaultValue = "7") Long pageSize,
+                       @RequestParam(defaultValue = "") String title,
                        Model model){
         QueryWrapper<TCmsTravelRoute> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("DELETE_STATUS","0");
         queryWrapper.orderByDesc("ADD_TIME");
+        if (!"".equals(title)){
+            queryWrapper.like("TITLE", title);
+        }
         IPage page = tCmsTravelRouteService.page(new Page<TCmsTravelRoute>(pageNumber, pageSize), queryWrapper);
         //将page对象存入pageHelper对象中
         PageHelper<TCmsTravelRoute> pageHelper = new PageHelper<TCmsTravelRoute>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());
@@ -92,16 +100,15 @@ public class TravelRouteController {
                 File f=new File(realPath);
                 if(f.exists()){
                     f.delete();
-                    System.out.println("删除了老照片，地址是："+realPath);
+                    //System.out.println("删除了老照片，地址是："+realPath);
                 }
             }
             //设置当前系统时间
             String nowTime = DateUtils.getNowTime();
             tCmsTravelRoute.setAddTime(nowTime);
-            //设置新增路线的人ID
-            TPzAdminUser admin = (TPzAdminUser) session.getAttribute("admin");
-            tCmsTravelRoute.setModifyUserId(admin.getModifyUserId());
-            System.out.println("要更新的对象是:"+tCmsTravelRoute);
+            //设置修改路线的人ID
+            tCmsTravelRoute.setModifyUserId(session.getId());
+            //System.out.println("要更新的对象是:"+tCmsTravelRoute);
             //需要响应类
             return new CommonResult(200,"请求成功",tCmsTravelRouteService.updateById(tCmsTravelRoute));
         } catch (Exception e) {
@@ -123,5 +130,28 @@ public class TravelRouteController {
             e.printStackTrace();
             return new CommonResult(500,"请求失败");
         }
+    }
+
+
+
+    //前台用户登录的网页
+    //跳转到路线页面
+    //实现分页查询
+    @RequestMapping("/portal_travelRoute_list")
+    public String portalList(@RequestParam(defaultValue = "1") Long pageNumber,
+                       @RequestParam(defaultValue = "7") Long pageSize,
+                       @RequestParam(defaultValue = "") String title,
+                       Model model){
+        QueryWrapper<TCmsTravelRoute> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("DELETE_STATUS","0");
+        queryWrapper.orderByDesc("ADD_TIME");
+        if (!"".equals(title)){
+            queryWrapper.like("TITLE", title);
+        }
+        IPage page = tCmsTravelRouteService.page(new Page<TCmsTravelRoute>(pageNumber, pageSize), queryWrapper);
+        //将page对象存入pageHelper对象中
+        PageHelper<TCmsTravelRoute> pageHelper = new PageHelper<TCmsTravelRoute>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());
+        model.addAttribute("pagerHelper", pageHelper);
+        return "/portal/travelRoute";
     }
 }

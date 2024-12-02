@@ -20,10 +20,15 @@ public class TYwOrderController {
     @RequestMapping("/userOrder_list")
     public String list(@RequestParam(defaultValue = "1") Long pageNumber,
                        @RequestParam(defaultValue = "7") Long pageSize,
+                       @RequestParam(defaultValue = "") String userName,
                        Model model){
+
         QueryWrapper<TYwOrder> queryWrapper = new QueryWrapper();
         queryWrapper.eq("DELETE_STATUS",0);
         queryWrapper.orderByDesc("ADD_TIME");
+        if (!"".equals(userName)){
+            queryWrapper.like("USER_NAME", userName);
+        }
         IPage page = tYwOrderService.page(new Page<TYwOrder>(pageNumber, pageSize), queryWrapper);
         //封装工具类
         PageHelper<TYwOrder> pagerHelper=new PageHelper<TYwOrder>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());

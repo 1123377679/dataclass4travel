@@ -62,7 +62,12 @@
             <artifactId>mybatis-plus-generator</artifactId>
             <version>3.5.5</version>
         </dependency>
-
+        <!--  验证码 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.16</version>
+        </dependency>
         <!-- 模板引擎 -->
         <dependency>
             <groupId>org.freemarker</groupId>

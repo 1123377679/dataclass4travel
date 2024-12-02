@@ -3,20 +3,20 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>会员中心-登陆</title>
-<link href="css/style.css" rel="stylesheet" type="text/css" />
-<link href="css/common.css" rel="stylesheet" type="text/css" />
+<link href="/css/style.css" rel="stylesheet" type="text/css" />
+<link href="/css/common.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
 <!--引入公共head-->
-<div th:replace="@{/commons/header}::head"></div>
+<div th:replace= "@{/commons/header}::head"></div>
 <!--引入公共head-->
 
 
 <div class="b_wrap">
     <div class="current"><span>当前所在地：</span><a th:href="@{/index}">首页</a>  >> <a th:href="@{/goLogin}">会员登录</a></div>
     <div class="login_w clearfix">
-    <form class="layui-form" method="post" action="/user_login">
+    <form class="layui-form">
         <div class="login">
             <div class="login_t">会员登录</div>
             <div class="login_con">
@@ -27,12 +27,13 @@
                   </tr>
                   <tr>
                     <td>密&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
-                    <td><input type="password" id="password" name="password" value="" placeholder="请输入密码"/></td>
+                    <td><input type="password" id="passWord" name="password" value="" placeholder="请输入密码"/></td>
                   </tr>
                     <tr>
                         <td>验&nbsp;证&nbsp;&nbsp;&nbsp;码：</td>
-                        <td><input type="text" style="width: 50px" id="code" name="userCode" value="" placeholder="请输入验证码"/>
-                            <img src="/createImage"  id="captcha" style="width:100px; cursor: pointer;" onclick="this.src=this.src+'?d='+Math.random();" title="点击刷新" alt="captcha">
+                        <td>
+                            <input type="text" style="width: 50px; vertical-align: middle;" id="code" name="userCode" value="" placeholder="请输入验证码"/>
+                            <img onclick="loadCode()" id="codeimg" src="" style="height: 40px; width: 100px; vertical-align: middle;">
                         </td>
                     </tr>
                   <tr>
@@ -43,7 +44,7 @@
                   </tr>
                   <tr>
                     <td>&nbsp;</td>
-                    <td><button class="log_b" type="submit">登 录</button>
+                    <td><button class="log_b" type="button" onclick="handleLogin()">登 录</button>
                         <!--<a class="back_m" th:href="@{/changePassword}">找回密码</a>--></td>
                   </tr>
                 </table>
@@ -83,4 +84,60 @@
     </div>
 </div>-->
 </body>
+<script>
+    // 验证码key
+    var codeKey = "";
+
+    // 获取并显示验证码
+    function loadCode() {
+        jQuery.ajax({
+            url: "/getcaptcha",
+            type: "GET",
+            data: {},
+            success: function (res) {
+                if (res.code = 200) {
+                    // 获取验证码成功
+                    codeKey = res.data.codekey;
+                    jQuery("#codeimg").attr("src", res.data.codeurl);
+                }
+            }
+        });
+    }
+    loadCode();
+    // 处理登录请求
+    function handleLogin() {
+        var userName = jQuery("#userName").val();
+        var passWord = jQuery("#passWord").val();
+        var userCode = jQuery("#code").val();
+
+        if (!userName || !passWord || !userCode) {
+            jQuery("#errorMessage").text("请填写所有必填项");
+            return;
+        }
+        jQuery.ajax({
+            url: "/user_login",
+            type: "POST",
+            data: {
+                userName: userName,
+                passWord: passWord,
+                userCode: userCode,
+                codeKey: codeKey
+            },
+            success: function (res) {
+                if (res.code === 200) {
+                    // 登录成功
+                    alert("登录成功")
+                        window.location.href = "/index";
+                } else {
+                    // 登录失败
+                    alert("登录失败")
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // 请求失败
+                jQuery("#errorMessage").text("请求失败，请稍后再试");
+            }
+        });
+    }
+</script>
 </html>
