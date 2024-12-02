@@ -1,6 +1,7 @@
 package cn.lanqiao.dataclass4travel.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -45,4 +46,14 @@ public class CommonController {
     public String toUserRegister(){
         return "portal/register.html";
     }
+
+    /**
+     * 跳转个人中心
+     * @return
+     */
+    @GetMapping("/user_tocenter")
+    public String toUserCenter(){
+        return "portal/userCenter.html";
+    }
+
 }

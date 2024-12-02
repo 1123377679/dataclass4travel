@@ -78,4 +78,5 @@ public class TCmsMessageController {
         model.addAttribute("entity", byId);
         return "message/messageView";
     }
+
 }

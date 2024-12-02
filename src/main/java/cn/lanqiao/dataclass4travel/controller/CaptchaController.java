@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -63,25 +65,5 @@ public class CaptchaController {
         }
     }
 //    验证验证码
-    @PostMapping("/user_login")
-    public CommonResult checkCaptcha(UserLoginDTO userLoginDTO, HttpSession session) {
-        System.out.println("用户输入的验证码：" + userLoginDTO);
-        String captchaCode = (String) session.getAttribute("captchaCode");
-        System.out.println("用户输入的验证码：" + captchaCode);
-        if (captchaCode != null && captchaCode.equalsIgnoreCase(userLoginDTO.getUserCode())) {
-            // 验证成功
-//            DTO转换为po
-            TPzUser tPzUser = new TPzUser();
-            BeanUtil.copyProperties(userLoginDTO,tPzUser);
-//            调用用户登录
-            TPzUser user = userService.lambdaQuery().eq(TPzUser::getUserName, userLoginDTO.getUserName()).eq(TPzUser::getPassWord, userLoginDTO.getPassWord()).one();
-            if (user != null){
-                return new CommonResult(200, "登录成功");
-            }
-            return new CommonResult(400, "用户名或密码错误");
-        } else {
-            // 验证失败
-            return new CommonResult(400, "验证码验证失败");
-        }
-    }
+
 }
