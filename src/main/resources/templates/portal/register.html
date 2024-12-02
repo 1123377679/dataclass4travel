@@ -50,12 +50,9 @@
                     type: "POST",
                     data: jQuery(this).serialize(),
                     success: function(response) {
-                        if (response.code === 200) {
-                            alert("注册成功")
-                            // 可以跳转到其他页面
-                            window.location.href = "/index";
-                        } else {
-                            alert("注册失败");
+                        if (response.message === '用户名已存在') {
+                            alert(response.message)
+
                         }
                     },
                     error: function() {
