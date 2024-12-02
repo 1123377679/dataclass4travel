@@ -185,4 +185,16 @@ public class InsuranceController {
         model.addAttribute("pagerHelper", pageHelper);
         return "portal/insurance";
     }
+
+    /**
+     * 前台保险详情
+     * */
+    @GetMapping("/portal_insurance_view/{id}")
+    public String view(@PathVariable("id") String id, Model model){
+        TCmsInsurance byId = insuranceService.getById(id);
+        model.addAttribute("entity",byId);
+        return "portal/insuranceView";
+
+    }
+
 }

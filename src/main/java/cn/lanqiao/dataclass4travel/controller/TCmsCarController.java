@@ -168,5 +168,14 @@ public class TCmsCarController {
     }
 
 
+    /*前台车票跳转详情页面*/
+    /*跳转详情页面*/
+    @GetMapping("/portal_car_toview/{id}")
+    public String toview(@PathVariable("id") String id,Model model){
+        TCmsCar tCmsCar = tCmsCarService.getById(id);
+        model.addAttribute("entity",tCmsCar);
+        return "portal/carView";
+    }
+
 
 }

@@ -163,4 +163,12 @@ public class HotelController {
         model.addAttribute("pagerHelper", hotelPageHelper);
         return "portal/hotelAccommodation";  // 返回视图
     }
+
+    //跳转前台详情页面
+    @GetMapping("/portal_hotel_toview/{id}")
+    public String toview(@PathVariable("id") String id,Model model){
+        Hotel byId = hotelService.getById(id);
+        model.addAttribute("entity",byId);
+        return "portal/hotelAccommodationView";
+    }
 }
