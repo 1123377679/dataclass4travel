@@ -1,7 +1,5 @@
 package cn.lanqiao.dataclass4travel.controller;
 
-import cn.lanqiao.dataclass4travel.mapper.TCmsScenicSpotMapper;
-import cn.lanqiao.dataclass4travel.pojo.Hotel;
 import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
@@ -27,9 +25,6 @@ public class TCmsScenicSpotController {
 
     @Autowired
     private TCmsScenicSpotService tCmsScenicSpotService;
-
-    @Autowired
-    private TCmsScenicSpotMapper tCmsScenicSpotMapper;
 
     /**
      * 01-分页查询
@@ -67,7 +62,13 @@ public class TCmsScenicSpotController {
             String nowTime = DateUtils.getNowTime();
             tCmsScenicSpot.setAddTime(nowTime);
             //设置添加人的id,从session中获取addUserId
-            tCmsScenicSpot.setAddUserId("b3o9sd7f5aS09");
+            // 获取当前管理员信息
+            TPzAdminUser addAdmin = (TPzAdminUser) session.getAttribute("admin");
+            // 账号登录检测
+            if (addAdmin == null) {
+                return new CommonResult(304, "用户未登录或Session已过期");
+            }
+            tCmsScenicSpot.setAddUserId(addAdmin.getId());
             //操作数据库进行添加
             System.out.println("要新增的对象是:"+tCmsScenicSpot);
             //需要响应类
@@ -85,7 +86,11 @@ public class TCmsScenicSpotController {
     @GetMapping("/scenicSpot_View/{id}")
     public String todetail(@PathVariable("id") String id, Model model){
         TCmsScenicSpot ById = tCmsScenicSpotService.getById(id);
-        model.addAttribute("entity", ById);
+        if (ById != null) {
+            model.addAttribute("entity", ById);
+        }else {
+            model.addAttribute("error", "账号未登录");
+        }
         return "scenicSpot/scenicSpotView";
     }
 
@@ -147,5 +152,27 @@ public class TCmsScenicSpotController {
         ById.setDeleteStatus(1L);
         tCmsScenicSpotService.updateById(ById);
         return new CommonResult(200, "请求成功");
+    }
+
+    /*跳转前台景点页面*/
+    /*前台分页查询*/
+    @RequestMapping("/portal_scenicSpot_list")
+    public String carList(@RequestParam(defaultValue = "1") Long pageNumber,
+                          @RequestParam(defaultValue = "7") Long pageSize,
+                          @RequestParam(defaultValue = "") String title,
+                          Model model){
+        //构造条件
+        QueryWrapper<TCmsScenicSpot> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("DELETE_STATUS","0");
+        queryWrapper.orderByDesc("ADD_TIME");
+        //条件查询
+        if (!"".equals(title)){
+            queryWrapper.like("TITLE", title);
+        }
+        IPage page = tCmsScenicSpotService.page(new Page<TCmsScenicSpot>(pageNumber, pageSize), queryWrapper);
+        //将page对象存入pageHelper对象中
+        PageHelper<TCmsScenicSpot> pageHelper = new PageHelper<TCmsScenicSpot>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());
+        model.addAttribute("pagerHelper", pageHelper);
+        return "/portal/travelSpot";
     }
 }
