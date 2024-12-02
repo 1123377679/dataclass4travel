@@ -154,4 +154,11 @@ public class TravelRouteController {
         model.addAttribute("pagerHelper", pageHelper);
         return "/portal/travelRoute";
     }
+    //跳转到详情页面
+    @GetMapping("/portal_travelRoute_toview/{id}")
+    public String toPortalDetail(@PathVariable("id") String id, Model model){
+        TCmsTravelRoute tCmsTravelRoute = tCmsTravelRouteService.getById(id);
+        model.addAttribute("entity", tCmsTravelRoute);//回显数据的对象
+        return "/portal/travelRouteView";
+    }
 }
