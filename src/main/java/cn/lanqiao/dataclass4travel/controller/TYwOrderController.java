@@ -81,4 +81,47 @@ public class TYwOrderController {
         tYwOrderService.updateById(tYwOrder);
         return new CommonResult(200,"请求成功");
     }
+
+
+
+    //前端订单管理分页查询
+
+    @RequestMapping("/user_myorderlist")
+    public String listWeb(@RequestParam(defaultValue = "1") Long pageNumber,
+                          @RequestParam(defaultValue = "7") Long pageSize,
+                          Model model) {
+
+        // 1. 设置分页查询的条件
+        QueryWrapper<TYwOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("DELETE_STATUS", 0);  // 过滤删除状态为 0 的订单
+        queryWrapper.orderByDesc("ADD_TIME"); // 按照添加时间降序排列
+
+        // 2. 使用 MyBatis-Plus 的分页查询
+        IPage<TYwOrder> page = tYwOrderService.page(new Page<TYwOrder>(pageNumber, pageSize), queryWrapper);
+
+        // 3. 封装分页数据到 PageHelper（假设你有自己定义的分页工具类）
+        PageHelper<TYwOrder> pagerHelper = new PageHelper<>(pageNumber, pageSize, page.getPages(), page.getTotal(), page.getRecords());
+
+        // 4. 将分页数据传递给前端
+        model.addAttribute("pagerHelper", pagerHelper);
+
+        // 5. 返回到对应的页面
+        return "portal/myOrder";
+    }
+
+
+    //跳转付款页面
+    @RequestMapping("/user_topayOrder/{id}")
+    public String editOrderWeb(@PathVariable String id, Model model) {
+        // 获取订单详情
+        TYwOrder order = tYwOrderService.getById(id);
+        if (order != null) {
+            // 将订单编号和费用添加到模型
+            model.addAttribute("order_code", order.getOrderCode());
+            model.addAttribute("fee", order.getFee());
+        } else {
+            model.addAttribute("error", "订单未找到");
+        }
+        return "portal/pay";  // 返回订单详情页面
+    }
 }
