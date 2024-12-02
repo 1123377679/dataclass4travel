@@ -1,6 +1,5 @@
 package cn.lanqiao.dataclass4travel.controller;
 
-import cn.lanqiao.dataclass4travel.mapper.TCmsScenicSpotMapper;
 import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
@@ -153,5 +152,27 @@ public class TCmsScenicSpotController {
         ById.setDeleteStatus(1L);
         tCmsScenicSpotService.updateById(ById);
         return new CommonResult(200, "请求成功");
+    }
+
+    /*跳转前台景点页面*/
+    /*前台分页查询*/
+    @RequestMapping("/portal_scenicSpot_list")
+    public String carList(@RequestParam(defaultValue = "1") Long pageNumber,
+                          @RequestParam(defaultValue = "7") Long pageSize,
+                          @RequestParam(defaultValue = "") String title,
+                          Model model){
+        //构造条件
+        QueryWrapper<TCmsScenicSpot> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("DELETE_STATUS","0");
+        queryWrapper.orderByDesc("ADD_TIME");
+        //条件查询
+        if (!"".equals(title)){
+            queryWrapper.like("TITLE", title);
+        }
+        IPage page = tCmsScenicSpotService.page(new Page<TCmsScenicSpot>(pageNumber, pageSize), queryWrapper);
+        //将page对象存入pageHelper对象中
+        PageHelper<TCmsScenicSpot> pageHelper = new PageHelper<TCmsScenicSpot>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());
+        model.addAttribute("pagerHelper", pageHelper);
+        return "/portal/travelSpot";
     }
 }
