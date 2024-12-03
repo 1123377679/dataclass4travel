@@ -5,6 +5,7 @@ import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.ui.Model;
 import cn.lanqiao.dataclass4travel.pojo.TCmsScenicSpot;
 import cn.lanqiao.dataclass4travel.service.TCmsScenicSpotService;
@@ -155,7 +156,8 @@ public class TCmsScenicSpotController {
     }
 
     /*跳转前台景点页面*/
-    /*前台分页查询*/
+    /* 01 - 分页查询
+    */
     @RequestMapping("/portal_scenicSpot_list")
     public String carList(@RequestParam(defaultValue = "1") Long pageNumber,
                           @RequestParam(defaultValue = "7") Long pageSize,
@@ -174,5 +176,15 @@ public class TCmsScenicSpotController {
         PageHelper<TCmsScenicSpot> pageHelper = new PageHelper<TCmsScenicSpot>(pageNumber,pageSize,page.getPages(),page.getTotal(),page.getRecords());
         model.addAttribute("pagerHelper", pageHelper);
         return "/portal/travelSpot";
+    }
+
+    /*
+     * 02 - 详情
+     */
+    @GetMapping("portal_scenicSpot_view/{id}")
+    public String view(@PathVariable("id") String id, Model model){
+        TCmsScenicSpot tCmsScenicSpot = tCmsScenicSpotService.getById(id);
+        model.addAttribute("entity", tCmsScenicSpot);
+        return "/portal/travelSpotView";
     }
 }

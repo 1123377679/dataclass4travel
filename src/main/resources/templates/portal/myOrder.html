@@ -28,21 +28,17 @@
                         </ul>
                     </div>
                     <div class="ftx">
+
                         <form id="pageForm" name="pageForm" action="/user_myorderlist" method="post">
                             <input type="hidden" id="count" name="count" th:value="${pagerHelper.totalCount}"/>
+                            <input type="hidden" id="pageNumber" name="pageNumber" th:value="${pagerHelper.pageNumber}"/>
                             <input type="hidden" id="size" name="size" th:value="${pagerHelper.pageCount}"/>
-                            <div class="fy_w">
-                                <a href="#" th:text="${pagerHelper.pageNumber}+'/'+${pagerHelper.pageCount}+'页'"> </a>
-
-                                <a class="previousPage" th:if="${pagerHelper.pageNumber != 1}"
-                                   th:href="|/user_myorderlist?pageNumber=${pagerHelper.pageNumber-1}|">上一页</a>
-
-                                <a class="toPageOne" th:href="|/user_myorderlist?pageNumber=1|">首页</a>
-
-                                <a class="nextPage" th:if="${pagerHelper.pageNumber != pagerHelper.pageCount}"
-                                   th:href="|/user_myorderlist?pageNumber=${pagerHelper.pageNumber+1}|">下一页</a>
-
-                                <a class="toPageLast" th:href="|/user_myorderlist?pageNumber=${pagerHelper.pageCount}|">尾页</a>
+                            <input type="hidden" id="pageSize" name="pageSize" th:value="${pagerHelper.pageSize}"/>
+                            <div class="fy_w"><a href="#" th:text="${pagerHelper.pageNumber}+'/'+${pagerHelper.pageCount}+'页'"> </a>
+                                <a class="previousPage">上一页</a>
+                                <a class="toPageOne">首页</a>
+                                <a class="nextPage">下一页</a>
+                                <a class="toPageLast">尾页</a>
                             </div>
                         </form>
                     </div>
@@ -165,6 +161,40 @@
             location.href="/user_cancelOrder/"+id+"/"+pageNumber;
         }
     }
+
+
+
+    $(".previousPage").click(function(){
+        if(parseInt($("#pageNumber").val())==1){
+            $("#pageNumber").val(1);
+            return;
+        }else{
+            $("#pageNumber").val(parseInt($("#pageNumber").val())-1);
+            $("#pageForm").submit();
+        }
+    })
+
+    $(".nextPage").click(function(){
+        if(parseInt($("#pageNumber").val())==parseInt($("#size").val())){
+            $("#pageNumber").val(parseInt($("#size").val()));
+            /* alert("xia yi ye1 ");*/
+            return;
+        }else{
+            $("#pageNumber").val(parseInt($("#pageNumber").val())+1);
+            /*alert("xia yi ye2 ");*/
+            $("#pageForm").submit();
+        }
+    })
+
+    $(".toPageOne").click(function(){
+        $("#pageNumber").val(1);
+        $("#pageForm").submit();
+    })
+
+    $(".toPageLast").click(function(){
+        $("#pageNumber").val(parseInt($("#size").val()));
+        $("#pageForm").submit();
+    })
 
 </script>
 </body>
