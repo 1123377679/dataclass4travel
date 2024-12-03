@@ -18,6 +18,8 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -177,5 +179,33 @@ public class TCmsCarController {
         return "portal/carView";
     }
 
+
+    /*跳转车票数据分析页面*/
+    @RequestMapping ("/tocarData")
+    public String carData(Model model){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("DELETE_STATUS",0);
+        queryWrapper.select("count(id),STATE");
+        queryWrapper.groupBy("STATE");
+        queryWrapper.orderByAsc("STATE");
+
+        List<Map<String, Object>> list = tCmsCarService.listMaps(queryWrapper);
+
+        Map<String, Object> map0 = list.get(0);
+        Object count_0 = map0.get("count(id)");
+
+        Map<String, Object> map1 = list.get(1);
+        Object count_1 = map1.get("count(id)");
+
+        Map<String, Object> map2 = list.get(2);
+        Object count_2 = map2.get("count(id)");
+
+        model.addAttribute("count_0",count_0);
+        model.addAttribute("count_1",count_1);
+        model.addAttribute("count_2",count_2);
+
+        return "data/carData";
+
+    }
 
 }
