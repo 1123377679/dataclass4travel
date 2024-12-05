@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+//import java.util.stream.Collectors;
 
 @Controller
 public class TYwOrderController {
@@ -137,30 +137,16 @@ public class TYwOrderController {
     @RequestMapping("/toorderData")
     public String toorderData(Model model) throws Exception {
 
-        List<TYwOrder> list = tYwOrderService.list().stream()
-                .filter(data -> data.getDeleteStatus() == 0)
-                .collect(Collectors.toList());
-
         List<OrderData> orderDataList = new ArrayList<>();
-        int i =0;
-        int j =0;
-        int k =0;
-        int l =0;
-        int m =0;
-        for(TYwOrder data:list){
-            if(data.getProductType()==0){
-                i++;
-            }else if(data.getProductType()==1){//
-                j++;
-            }else if(data.getProductType()==2){
-                k++;
-            }else if(data.getProductType()==3){
-                l++;
-            }else if(data.getProductType()==4){
-                m++;
-            }
-        }
+        int i = Math.toIntExact(tYwOrderService.lambdaQuery().eq(TYwOrder::getProductType, 0).eq(TYwOrder::getDeleteStatus, 0).count());
 
+        int j = Math.toIntExact(tYwOrderService.lambdaQuery().eq(TYwOrder::getProductType, 1).eq(TYwOrder::getDeleteStatus, 0).count());
+
+        int k = Math.toIntExact(tYwOrderService.lambdaQuery().eq(TYwOrder::getProductType, 2).eq(TYwOrder::getDeleteStatus, 0).count());
+
+        int l = Math.toIntExact(tYwOrderService.lambdaQuery().eq(TYwOrder::getProductType, 3).eq(TYwOrder::getDeleteStatus, 0).count());
+
+        int m = Math.toIntExact(tYwOrderService.lambdaQuery().eq(TYwOrder::getProductType, 4).eq(TYwOrder::getDeleteStatus, 0).count());
             orderDataList.add(new OrderData(i,"旅游路线",0)); //旅游路线
             orderDataList.add(new OrderData(j,"旅游景点",1)); //旅游景点
             orderDataList.add(new OrderData(k,"旅游酒店",2)); //旅游酒店
