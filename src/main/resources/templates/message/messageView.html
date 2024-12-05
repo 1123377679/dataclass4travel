@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="/js/new/kindeditor/themes/default/default.css"/>
 	<script charset="utf-8" src="/js/new/kindeditor/kindeditor-all-min.js"></script>
 	<script charset="utf-8" src="/js/new/kindeditor/lang/zh-CN.js"></script>
+	<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 </head>
 <body class="childrenBody">
 	<form class="layui-form" id="messageForm"  action="/manager/messageSave" method="post">
@@ -48,7 +49,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">留言回复</label>
 			<div class="layui-input-block">
-				<p th:text="${entity.content}">
+				<p th:text="${entity.replyContent}">
 
 				</p>
 			</div>
@@ -71,9 +72,10 @@
 				<a class="layui-btn" href="/message_list">返回</a>
 				<button type="button" class="layui-btn" onclick="submitForm()">回复留言</button>
 			</div>
+				<span th:text="${message}" style="color:red;"></span>
 		</div>
 		<!-- 添加隐藏的输入字段 -->
-		<input type="hidden" id="hiddenRequirement" name="hiddenRequirement" />
+		<input type="hidden" id="replyContent" name="replyContent" />
 	</form>
 	<script type="text/javascript" src="/layui/layui.js"></script>
 	<script type="text/javascript" src="/js/hotel/hotelEdit.js"></script>
@@ -94,14 +96,24 @@
 		});
 		// 提交表单时的处理函数
 		function submitForm() {
-			// 获取富文本编辑器的内容
-			var requirementContent = editor.html();
+			var title = $("#title").val();
+			var content = editor.html();
+			var id = $("#id").val();
+			$.ajax({
+				url: "/manager/messageSave",
+				type: "POST",
+				contentType: "application/json",
+				data: JSON.stringify({ "title": title, "replyContent": content, "id": id }),
+				success: function (result) {
+					if (result.code == 200) {
+						alert("留言成功!")
+						location.href = "/message_View/"+id;
+					} else {
+						alert("留言异常: " + result.message);
+					}
+				}
 
-			// 将内容设置到隐藏的输入字段中
-			document.getElementById('hiddenRequirement').value = requirementContent;
-
-			// 提交表单
-			document.getElementById('messageForm').submit();
+			});
 		}
 		</script>
 </body>
