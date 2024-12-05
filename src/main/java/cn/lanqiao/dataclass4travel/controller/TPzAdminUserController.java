@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -99,5 +100,16 @@ public class  TPzAdminUserController {
             e.printStackTrace();
             return new CommonResult(304,"请求异常");
         }
+    }
+
+    /**
+     * 后台管理员注销
+     * @param session
+     * @return
+     */
+    @GetMapping("/adminUser_logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "login";
     }
 }

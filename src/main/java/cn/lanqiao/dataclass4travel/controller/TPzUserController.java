@@ -9,6 +9,10 @@ import cn.lanqiao.dataclass4travel.pojo.dto.UserLoginDTO;
 import cn.lanqiao.dataclass4travel.service.ITCmsMessageService;
 import cn.lanqiao.dataclass4travel.service.ITPzUserService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
+import cn.lanqiao.dataclass4travel.utils.PageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -168,5 +172,29 @@ public class TPzUserController {
 
         }
     }
-
+    @GetMapping("/user_messageList")
+    public String messageList(@RequestParam(defaultValue = "1") Long pageNumber,
+                              @RequestParam(defaultValue = "7") Long pageSize,
+            Model model, HttpSession session) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        TPzUser user = (TPzUser) session.getAttribute("user");
+        queryWrapper.eq("USER_ID", user.getId());
+        queryWrapper.eq("DELETE_STATUS", 0);
+        queryWrapper.orderByDesc("ADD_TIME");
+        IPage page = tCmsMessageService.page(new Page<>(pageNumber, pageSize), queryWrapper);
+        PageHelper<TCmsMessage> pagerHelper = new PageHelper<TCmsMessage>(pageNumber, pageSize, page.getPages(), page.getTotal(), page.getRecords());
+        model.addAttribute("pagerHelper", pagerHelper);
+        return "portal/messageList";
+    }
+    /**
+     * 用户数据分析
+     */
+    @RequestMapping("/touserData")
+    public String toUserData(Model model) {
+        Long count_0 = tPzUserService.lambdaQuery().eq(TPzUser::getDeleteStatus, 0).count();
+        Long count_1 = tPzUserService.lambdaQuery().eq(TPzUser::getDeleteStatus, 1).count();
+        model.addAttribute("count_0",count_0);
+        model.addAttribute("count_1",count_1);
+        return "data/userData";
+    }
 }

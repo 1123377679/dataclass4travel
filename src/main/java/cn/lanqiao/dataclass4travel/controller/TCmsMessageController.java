@@ -1,8 +1,11 @@
 package cn.lanqiao.dataclass4travel.controller;
 
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.UUID;
 import cn.lanqiao.dataclass4travel.pojo.TCmsMessage;
 import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
+import cn.lanqiao.dataclass4travel.pojo.TPzUser;
 import cn.lanqiao.dataclass4travel.service.ITCmsMessageService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
@@ -11,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -78,5 +82,33 @@ public class TCmsMessageController {
         model.addAttribute("entity", byId);
         return "message/messageView";
     }
+    @PostMapping("user_leaveMessage")
+    @ResponseBody
+    public CommonResult leaveMessage(@RequestBody TCmsMessage tCmsMessage, HttpSession session){
+        TPzUser user = (TPzUser) session.getAttribute("user");
+        BeanUtil.copyProperties(user, tCmsMessage);
+        //设置唯一id
+        tCmsMessage.setId(UUID.randomUUID().toString().replace("-", ""));
+        tCmsMessage.setUserId(user.getId());
+        boolean save = tCmsMessageService.save(tCmsMessage);
+        if (save){
+            return new CommonResult(200, "留言成功");
+        }
+        return new CommonResult(500, "留言失败");
+    }
+    @PostMapping("manager/messageSave")
+    @ResponseBody
+    public CommonResult save(@RequestBody TCmsMessage tCmsMessage, Model model){
+        boolean update = tCmsMessageService.lambdaUpdate().set(TCmsMessage::getReplyContent, tCmsMessage.getReplyContent()).eq(TCmsMessage::getId, tCmsMessage.getId()).update();
+        TCmsMessage byId = tCmsMessageService.getById(tCmsMessage.getId());
+        if (update){
+        model.addAttribute("entity", byId);
+        model.addAttribute("message", "回复成功");
+            return new CommonResult(200, "回复成功");
+        }else {
+            model.addAttribute("message", "回复失败");
+            return new CommonResult(500, "回复失败");
+        }
 
+    }
 }

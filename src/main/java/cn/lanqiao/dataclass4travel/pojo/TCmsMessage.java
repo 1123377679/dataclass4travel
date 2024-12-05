@@ -97,6 +97,10 @@ public class TCmsMessage implements Serializable {
      */
     @TableField("STATE")
     private Integer state;
-
+    /**
+     * 回复
+     */
+    @TableField("REPLY_CONTENT")
+    private String replyContent;
 
 }
