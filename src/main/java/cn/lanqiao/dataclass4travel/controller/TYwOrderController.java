@@ -152,7 +152,6 @@ public class TYwOrderController {
             orderDataList.add(new OrderData(k,"旅游酒店",2)); //旅游酒店
             orderDataList.add(new OrderData(l,"旅游车票",3)); //旅游车票
             orderDataList.add(new OrderData(m,"旅游保险",4)); //旅游保险
-
             //对象转JSON
             ObjectMapper objectMapper=new ObjectMapper();
             String datas = objectMapper.writeValueAsString(orderDataList);
