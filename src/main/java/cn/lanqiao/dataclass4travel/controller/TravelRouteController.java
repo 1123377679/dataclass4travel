@@ -1,18 +1,15 @@
 package cn.lanqiao.dataclass4travel.controller;
 
 import cn.lanqiao.dataclass4travel.pojo.TCmsTravelRoute;
-import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
+import cn.lanqiao.dataclass4travel.pojo.TPzUser;
 import cn.lanqiao.dataclass4travel.service.TCmsTravelRouteService;
 import cn.lanqiao.dataclass4travel.service.TPzAdminUserService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
-import com.alibaba.druid.support.json.JSONUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
-import io.swagger.v3.core.util.Json;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,6 +128,40 @@ public class TravelRouteController {
             return new CommonResult(500,"请求失败");
         }
     }
+    //路线数据分析
+    //跳转页面
+    @GetMapping("/travelRouteData")
+    public String travelRouteData(Model model){
+        List<TCmsTravelRoute> tCmsTravelRoute = tCmsTravelRouteService.list();
+        // 分类统计各状态的数量
+        //stream() 方法将这个集合转换为一个流(Stream),允许对集合以声明性方式进行操作。
+        //.filter(route -> "待发布".equals(route.getStatus())):
+        //
+        //filter 是流中的一个中间操作，接收一个 Predicate 函数（条件判断函数）。
+        //这里的 route -> route.getState()==0 是一个 Lambda 表达式
+//        int count_0 = (int) tCmsTravelRoute.stream().filter(route -> route.getState()==0).count();
+//        int count_1 = (int) tCmsTravelRoute.stream().filter(route -> route.getState()==1).count();
+//        int count_2 = (int) tCmsTravelRoute.stream().filter(route -> route.getState()==2).count();
+        // 将数据放入模型，供视图使用
+//        model.addAttribute("count_0", count_0);
+//        model.addAttribute("count_1", count_1);
+//        model.addAttribute("count_2", count_2);
+
+
+        Long count_0 = tCmsTravelRouteService.lambdaQuery().eq(TCmsTravelRoute::getState, 0).count();
+        Long count_1 = tCmsTravelRouteService.lambdaQuery().eq(TCmsTravelRoute::getState, 1).count();
+        Long count_2 = tCmsTravelRouteService.lambdaQuery().eq(TCmsTravelRoute::getState, 2).count();
+        model.addAttribute("count_0",count_0);
+        model.addAttribute("count_1",count_1);
+        model.addAttribute("count_2",count_2);
+        return "data/travelRouteData";
+    }
+
+
+
+
+
+
 
 
 
