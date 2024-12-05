@@ -157,7 +157,6 @@ public class TYwOrderController {
             ObjectMapper objectMapper=new ObjectMapper();
             String datas = objectMapper.writeValueAsString(orderDataList);
             System.out.println(datas);
-
             model.addAttribute("datas",datas);
             return "data/orderData";
     }
