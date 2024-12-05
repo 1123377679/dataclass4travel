@@ -32,7 +32,4 @@ public class TYwOrder {
   private String imgUrl;
 
 
-
-
-
 }
