@@ -1,5 +1,6 @@
 package cn.lanqiao.dataclass4travel.controller;
 
+import cn.lanqiao.dataclass4travel.pojo.OrderData;
 import cn.lanqiao.dataclass4travel.pojo.TYwOrder;
 import cn.lanqiao.dataclass4travel.service.TYwOrderService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
@@ -7,10 +8,16 @@ import cn.lanqiao.dataclass4travel.utils.PageHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class TYwOrderController {
@@ -123,5 +130,49 @@ public class TYwOrderController {
             model.addAttribute("error", "订单未找到");
         }
         return "portal/pay";  // 返回订单详情页面
+    }
+
+
+//数据分析
+    @RequestMapping("/toorderData")
+    public String toorderData(Model model) throws Exception {
+
+        List<TYwOrder> list = tYwOrderService.list().stream()
+                .filter(data -> data.getDeleteStatus() == 0)
+                .collect(Collectors.toList());
+
+        List<OrderData> orderDataList = new ArrayList<>();
+        int i =0;
+        int j =0;
+        int k =0;
+        int l =0;
+        int m =0;
+        for(TYwOrder data:list){
+            if(data.getProductType()==0){
+                i++;
+            }else if(data.getProductType()==1){//
+                j++;
+            }else if(data.getProductType()==2){
+                k++;
+            }else if(data.getProductType()==3){
+                l++;
+            }else if(data.getProductType()==4){
+                m++;
+            }
+        }
+
+            orderDataList.add(new OrderData(i,"旅游路线",0)); //旅游路线
+            orderDataList.add(new OrderData(j,"旅游景点",1)); //旅游景点
+            orderDataList.add(new OrderData(k,"旅游酒店",2)); //旅游酒店
+            orderDataList.add(new OrderData(l,"旅游车票",3)); //旅游车票
+            orderDataList.add(new OrderData(m,"旅游保险",4)); //旅游保险
+
+            //对象转JSON
+            ObjectMapper objectMapper=new ObjectMapper();
+            String datas = objectMapper.writeValueAsString(orderDataList);
+            System.out.println(datas);
+
+            model.addAttribute("datas",datas);
+            return "data/orderData";
     }
 }

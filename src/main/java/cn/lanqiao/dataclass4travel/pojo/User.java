@@ -1,5 +1,9 @@
 package cn.lanqiao.dataclass4travel.pojo;
 
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,29 +11,23 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TYwOrder {
+@TableName("t_pz_user")
+public class User {
 
+  @TableId(value = "id",type = IdType.ASSIGN_UUID)
   private String id;
+
   private String addUserId;
   private String addTime;
   private long deleteStatus;
   private String modifyUserId;
   private String modifyTime;
-  private String userId;
   private String userName;
-  private String productId;
-  private String productName;
-  private double fee;
-  private long productType;
-  private long state;
-  private String orderCode;
-  private String orderTime;
-  private String setoffTime;
+  private String password;
   private String linkTel;
-  private long peopleCount;
-  private String requirement;
+  private String name;
   private String icCode;
-  private String imgUrl;
-
+  private long state;
+  private long province;
 
 }
