@@ -223,7 +223,7 @@ public class InsuranceController {
         Map<String, Object> map1 = list.get(1);
         Object count_1 = map1.get("count(id)");
 
-        Map<String, Object> map2 = list.get(2);
+        Map<String, Object> map2 = list.get(3);
         Object count_2 = map2.get("count(id)");
 
         model.addAttribute("count_0",count_0);
