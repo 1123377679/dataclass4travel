@@ -20,6 +20,8 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -170,5 +172,32 @@ public class HotelController {
         Hotel byId = hotelService.getById(id);
         model.addAttribute("entity",byId);
         return "portal/hotelAccommodationView";
+    }
+    // 酒店数据分析
+    @RequestMapping("tohotelData")
+    public String hotelData(Model model){
+
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("DELETE_STATUS", 0);
+        queryWrapper.select("count(id),STATE");
+        queryWrapper.groupBy("STATE");
+        queryWrapper.orderByAsc("STATE");
+
+        List<Map<String,Object>> list = hotelService.listMaps(queryWrapper);
+        Map<String, Object> map0 = list.get(0);
+        Object count_0 = map0.get("count(id)");
+
+        Map<String, Object> map1 = list.get(1);
+        Object count_1 = map1.get("count(id)");
+
+        Map<String, Object> map2 = list.get(2);
+        Object count_2 = map2.get("count(id)");
+
+        String datas="["+count_0+", "+count_1+", "+count_2+"]";
+
+        model.addAttribute("datas",datas);
+
+        return "data/hotelData";
+
     }
 }
