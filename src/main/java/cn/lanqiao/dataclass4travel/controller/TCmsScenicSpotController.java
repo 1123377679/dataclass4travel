@@ -5,7 +5,6 @@ import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.ui.Model;
 import cn.lanqiao.dataclass4travel.pojo.TCmsScenicSpot;
 import cn.lanqiao.dataclass4travel.service.TCmsScenicSpotService;
@@ -19,6 +18,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.util.*;
 
 @Controller
 @Slf4j
@@ -153,6 +153,35 @@ public class TCmsScenicSpotController {
         ById.setDeleteStatus(1L);
         tCmsScenicSpotService.updateById(ById);
         return new CommonResult(200, "请求成功");
+    }
+
+    /*
+     * 08 - 数据分析
+     */
+    @GetMapping("/toscenicSpotData")
+    public String toscenicSpotData(Model model){
+
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("DELETE_STATUS", 0);
+        queryWrapper.select("count(id),STATE");
+        queryWrapper.groupBy("STATE");
+        queryWrapper.orderByAsc("STATE");
+
+        List<Map<String,Object>> list = tCmsScenicSpotService.listMaps(queryWrapper);
+        Map<String, Object> map0 = list.get(0);
+        Object count_0 = map0.get("count(id)");
+
+        Map<String, Object> map1 = list.get(1);
+        Object count_1 = map1.get("count(id)");
+
+        Map<String, Object> map2 = list.get(2);
+        Object count_2 = map2.get("count(id)");
+
+        String datas="["+count_0+", "+count_1+", "+count_2+"]";
+
+        model.addAttribute("datas",datas);
+
+        return "data/scenicSpotData";
     }
 
     /*跳转前台景点页面*/
