@@ -132,7 +132,7 @@ public class TravelRouteController {
     //跳转页面
     @GetMapping("/travelRouteData")
     public String travelRouteData(Model model){
-        List<TCmsTravelRoute> tCmsTravelRoute = tCmsTravelRouteService.list();
+        //List<TCmsTravelRoute> tCmsTravelRoute = tCmsTravelRouteService.list();
         // 分类统计各状态的数量
         //stream() 方法将这个集合转换为一个流(Stream),允许对集合以声明性方式进行操作。
         //.filter(route -> "待发布".equals(route.getStatus())):
