@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,5 +160,27 @@ public class TYwOrderController {
             System.out.println(datas);
             model.addAttribute("datas",datas);
             return "data/orderData";
+    }
+
+
+    //撤销功能
+    @RequestMapping("/user_cancelOrder/{orderId}/{pageNumber}")
+    public String cancelOrder(@PathVariable String orderId, @PathVariable Long pageNumber, Model model) {
+        // 1. 根据订单ID获取订单对象
+        TYwOrder order = tYwOrderService.getById(orderId);
+
+        // 2. 判断订单是否存在，并且是否允许取消
+        if (order != null && order.getState() == 0) { // 假设 0 代表未付款的状态
+            // 3. 修改订单状态为取消
+            order.setState(2);  // 假设 2 代表已取消状态
+            tYwOrderService.updateById(order); // 更新数据库中的订单状态
+
+            // 4. 取消订单后，我们依然需要返回分页后的订单列表
+            return "redirect:/user_myorderlist?pageNumber=" + pageNumber;  // 保持分页状态
+        } else {
+            // 如果订单不存在或者不允许取消，返回错误提示页面或者重定向
+            model.addAttribute("error", "订单取消失败");
+            return "portal/myOrder"; // 返回订单列表页面，展示错误信息
+        }
     }
 }
