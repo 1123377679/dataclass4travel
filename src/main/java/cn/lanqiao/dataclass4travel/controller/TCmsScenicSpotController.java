@@ -155,34 +155,6 @@ public class TCmsScenicSpotController {
         return new CommonResult(200, "请求成功");
     }
 
-    /*
-     * 08 - 数据分析
-     */
-    @GetMapping("/toscenicSpotData")
-    public String toscenicSpotData(Model model){
-
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("DELETE_STATUS", 0);
-        queryWrapper.select("count(id),STATE");
-        queryWrapper.groupBy("STATE");
-        queryWrapper.orderByAsc("STATE");
-
-        List<Map<String,Object>> list = tCmsScenicSpotService.listMaps(queryWrapper);
-        Map<String, Object> map0 = list.get(0);
-        Object count_0 = map0.get("count(id)");
-
-        Map<String, Object> map1 = list.get(1);
-        Object count_1 = map1.get("count(id)");
-
-        Map<String, Object> map2 = list.get(2);
-        Object count_2 = map2.get("count(id)");
-
-        String datas="["+count_0+", "+count_1+", "+count_2+"]";
-
-        model.addAttribute("datas",datas);
-
-        return "data/scenicSpotData";
-    }
 
     /*跳转前台景点页面*/
     /* 01 - 分页查询
@@ -216,4 +188,51 @@ public class TCmsScenicSpotController {
         model.addAttribute("entity", tCmsScenicSpot);
         return "/portal/travelSpotView";
     }
+
+    /**
+     * 数据分析
+     * @return
+     */
+    @GetMapping("/toscenicSpotData")
+    public String toscenicSpotData(Model model){
+
+        System.out.println("数据分析");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("DELETE_STATUS", 0);
+        queryWrapper.select("count(id),STATE");
+        queryWrapper.groupBy("STATE");
+        queryWrapper.orderByAsc("STATE");
+
+        List<Map<String,Object>> list = tCmsScenicSpotService.listMaps(queryWrapper);
+
+        System.out.println("list查询数据: "+list);
+
+        Object count_0 = 0;
+        if (list.size() > 0) {
+            Map<String, Object> map0 = list.get(0);
+            count_0 = map0.get("count(id)");
+        }
+
+        Object count_1 = 0;
+        if (list.size() > 1) {
+            Map<String, Object> map1 = list.get(1);
+            count_1 = map1.get("count(id)");
+        }
+
+        Object count_2 = 0;
+        if (list.size() > 2) {
+            Map<String, Object> map2 = list.get(2);
+            count_2 = map2.get("count(id)");
+        }
+
+        String datas="["+count_0+", "+count_1+", "+count_2+"]";
+//
+        model.addAttribute("datas",datas);
+
+        return "data/scenicSpotData";
+    }
 }
+
+// SELECT count(id),STATE FROM t_cms_scenic_spot WHERE (DELETE_STATUS = ?) GROUP BY STATE ORDER BY STATE ASC
+
+// SELECT count(id),STATE FROM t_cms_insurance WHERE (DELETE_STATUS = ?) GROUP BY STATE ORDER BY STATE ASC
