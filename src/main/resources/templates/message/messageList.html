@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+	<style>
+		.truncate {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 200px; /* 你可以根据需要调整最大宽度 */
+	}
+	</style>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<title>留言管理列表</title>
 	<meta name="renderer" content="webkit"/>
@@ -32,7 +40,7 @@
 				<col width="10%"/>
 				<col width="12%"/>
 				<col width="15%"/>
-
+				<col width="15%"/>
 		    </colgroup>
 		    <thead>
 				<tr>
@@ -41,6 +49,7 @@
 					<th>真实姓名</th>
 					<th>标题</th>
 					<th>留言时间</th>
+					<th>留言回复</th>
 					<th>操作</th>
 				</tr>
 		    </thead>
@@ -51,7 +60,7 @@
 					<td th:text="${var.name}"></td>
 					<td th:text="${var.title}"></td>
 					<td th:text="${var.addTime}"></td>
-
+					<td  class="truncate" th:text="${var.replyContent != null ? var.replyContent : '未回复'}"></td>
 
 					<td>
 						<a title="查看用户留言" class="layui-btn layui-btn-xs" th:href="|/message_View/${var.id}|">

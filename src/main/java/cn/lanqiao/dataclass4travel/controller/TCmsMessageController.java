@@ -111,4 +111,14 @@ public class TCmsMessageController {
         }
 
     }
+    /**
+     * 跳转详情页面
+     * @return
+     */
+    @GetMapping("user_messageView/{id}")
+    public String toUserDetail(@PathVariable String id , Model model){
+        TCmsMessage byId = tCmsMessageService.getById(id);
+        model.addAttribute("userMessage", byId);
+        return "portal/messageView";
+    }
 }
