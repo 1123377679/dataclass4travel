@@ -1,21 +1,25 @@
 package cn.lanqiao.dataclass4travel.controller;
 
 import cn.lanqiao.dataclass4travel.pojo.OrderData;
+import cn.lanqiao.dataclass4travel.pojo.TPzUser;
 import cn.lanqiao.dataclass4travel.pojo.TYwOrder;
 import cn.lanqiao.dataclass4travel.service.TYwOrderService;
+
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.view.RedirectView;
 
+
+import java.nio.file.FileStore;
 import java.util.ArrayList;
 import java.util.List;
 //import java.util.stream.Collectors;
@@ -24,6 +28,7 @@ import java.util.List;
 public class TYwOrderController {
     @Autowired
     private TYwOrderService tYwOrderService;
+
     //订单管理分页查询功能
     @RequestMapping("/userOrder_list")
     public String list(@RequestParam(defaultValue = "1") Long pageNumber,
@@ -97,22 +102,21 @@ public class TYwOrderController {
     @RequestMapping("/user_myorderlist")
     public String listWeb(@RequestParam(defaultValue = "1") Long pageNumber,
                           @RequestParam(defaultValue = "7") Long pageSize,
+                          HttpSession session,
                           Model model) {
-
         // 1. 设置分页查询的条件
         QueryWrapper<TYwOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("DELETE_STATUS", 0);  // 过滤删除状态为 0 的订单
         queryWrapper.orderByDesc("ADD_TIME"); // 按照添加时间降序排列
-
+        TPzUser user = (TPzUser) session.getAttribute("user");
+        String userId = user.getId();
+        queryWrapper.eq("id",userId);
         // 2. 使用 MyBatis-Plus 的分页查询
         IPage<TYwOrder> page = tYwOrderService.page(new Page<TYwOrder>(pageNumber, pageSize), queryWrapper);
-
         // 3. 封装分页数据到 PageHelper（假设你有自己定义的分页工具类）
         PageHelper<TYwOrder> pagerHelper = new PageHelper<>(pageNumber, pageSize, page.getPages(), page.getTotal(), page.getRecords());
-
         // 4. 将分页数据传递给前端
         model.addAttribute("pagerHelper", pagerHelper);
-
         // 5. 返回到对应的页面
         return "portal/myOrder";
     }
@@ -148,11 +152,23 @@ public class TYwOrderController {
         int l = Math.toIntExact(tYwOrderService.lambdaQuery().eq(TYwOrder::getProductType, 3).eq(TYwOrder::getDeleteStatus, 0).count());
 
         int m = Math.toIntExact(tYwOrderService.lambdaQuery().eq(TYwOrder::getProductType, 4).eq(TYwOrder::getDeleteStatus, 0).count());
-            orderDataList.add(new OrderData(i,"旅游路线",0)); //旅游路线
-            orderDataList.add(new OrderData(j,"旅游景点",1)); //旅游景点
-            orderDataList.add(new OrderData(k,"旅游酒店",2)); //旅游酒店
-            orderDataList.add(new OrderData(l,"旅游车票",3)); //旅游车票
-            orderDataList.add(new OrderData(m,"旅游保险",4)); //旅游保险
+
+            if(i>0){
+                orderDataList.add(new OrderData(i,"旅游路线",0)); //旅游路线
+            }
+            if(j>0){
+                orderDataList.add(new OrderData(j,"旅游景点",1)); //旅游景点
+            }
+            if(k>0){
+                orderDataList.add(new OrderData(k,"旅游酒店",2)); //旅游酒店
+            }
+            if(l>0){
+                orderDataList.add(new OrderData(l,"旅游车票",3)); //旅游车票
+            }
+            if(m>0){
+                orderDataList.add(new OrderData(m,"旅游保险",4)); //旅游保险
+            }
+
 
             //对象转JSON
             ObjectMapper objectMapper=new ObjectMapper();
