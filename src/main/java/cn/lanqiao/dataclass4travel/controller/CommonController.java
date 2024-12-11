@@ -105,7 +105,7 @@ public class CommonController {
      * @return
      */
     @GetMapping("/portal_attention")
-    public String toUserCenter2(){
+    public String toPortalAttention(){
         return "/portal/attention";
     }
 
