@@ -100,4 +100,13 @@ public class CommonController {
         return "data/main";
     }
 
+    /**
+     * 注意事项
+     * @return
+     */
+    @GetMapping("/portal_attention")
+    public String toUserCenter2(){
+        return "/portal/attention";
+    }
+
 }
