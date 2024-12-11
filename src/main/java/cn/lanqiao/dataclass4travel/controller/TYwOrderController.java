@@ -108,9 +108,16 @@ public class TYwOrderController {
         QueryWrapper<TYwOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("DELETE_STATUS", 0);  // 过滤删除状态为 0 的订单
         queryWrapper.orderByDesc("ADD_TIME"); // 按照添加时间降序排列
-        TPzUser user = (TPzUser) session.getAttribute("user");
-        String userId = user.getId();
-        queryWrapper.eq("id",userId);
+        try {
+            TPzUser user = (TPzUser) session.getAttribute("user");
+            String userName = user.getUserName();
+            System.out.println(userName);
+            queryWrapper.eq("USER_NAME",userName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 如果没有登录，则跳转到登录页面
+            return "portal/login";
+        }
         // 2. 使用 MyBatis-Plus 的分页查询
         IPage<TYwOrder> page = tYwOrderService.page(new Page<TYwOrder>(pageNumber, pageSize), queryWrapper);
         // 3. 封装分页数据到 PageHelper（假设你有自己定义的分页工具类）
@@ -168,7 +175,6 @@ public class TYwOrderController {
             if(m>0){
                 orderDataList.add(new OrderData(m,"旅游保险",4)); //旅游保险
             }
-
 
             //对象转JSON
             ObjectMapper objectMapper=new ObjectMapper();
