@@ -213,6 +213,7 @@ public class TPzUserController {
                 .set(TPzUser::getLinkTel, user.getLinkTel())
                 .set(TPzUser::getIcCode, user.getIcCode())
                 .set(TPzUser::getProvince, user.getProvince())
+                .eq(TPzUser::getId, user.getId())
                 .update();
         if (update){
             TPzUser byId = tPzUserService.getById(user.getId());
