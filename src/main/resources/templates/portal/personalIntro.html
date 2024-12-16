@@ -1,10 +1,42 @@
 ﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>中国梦想游-会员登录页</title>
-<link href="css/style.css" rel="stylesheet" type="text/css" />
-<link href="css/common.css" rel="stylesheet" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>中国梦想游-会员登录页</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="css/common.css" rel="stylesheet" type="text/css" />
+    <script src="/js/jquery-1.9.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('form').on('submit', function(event) {
+                event.preventDefault(); // 阻止表单默认提交行为
+
+                var formData = {
+                    id: $('#id').val(),
+                    userName: $('#userName').val(),
+                    name: $('#name').val(),
+                    linkTel: $('#linkTel').val(),
+                    icCode: $('#icCode').val(),
+                    province: $('#province').val()
+                };
+
+                $.ajax({
+                    url: '/user_updateInfo',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        console.log('Success:', response);
+                        // 处理成功响应
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        // 处理错误响应
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -16,37 +48,37 @@
     <div class="current"><span>当前所在地：</span><a th:href="@{/index}">首页</a> >> <a th:href="@{/userCenter}">会员中心</a></div>
     <div class="fmember">
 
-    	<!--用户菜单引用-->
+        <!--用户菜单引用-->
         <div th:replace="@{/commons/usermenus}::menu"></div>
 
         <div class="fmright">
-        	<div class="fmr1">
-            	<div class="fmr1_top">个人资料</div>
+            <div class="fmr1">
+                <div class="fmr1_top">个人资料</div>
                 <div class="fmr1_m">
-                <form method="post" action="/user_updateInfo">
-                    <input type="hidden" id="id" name="id" th:value="${entity.id}"/>
-                    <p class="fp3">
-                    	<table border="0" cellpadding="0" cellspacing="0" width="638">
-                        	<tr>
-                            	<td width="60" align="left" height="30">用户名：</td>
-                                <td width="578" align="left" height="30"><input type="text" th:value="${entity.userName}" class="finput3" id="userName" name="userName" value="" placeholder="请输入用户名"/></td>
+                    <form method="post" action="/user_updateInfo">
+                        <input type="hidden" id="id" th:value="${entity.id}"/>
+                        <p class="fp3">
+                        <table border="0" cellpadding="0" cellspacing="0" width="638">
+                            <tr>
+                                <td width="60" align="left" height="30">用户名：</td>
+                                <td width="578" align="left" height="30"><input type="text" th:value="${entity.userName}" class="finput3" id="userName" value="" placeholder="请输入用户名"/></td>
                             </tr>
                             <tr>
-                            	<td width="100" align="left" height="30">真实姓名：</td>
-                                <td width="578" align="left" height="30"><input type="text" th:value="${entity.name}" class="finput3" id="name" name="name" value="" placeholder="请输入真实姓名"/></td>
+                                <td width="100" align="left" height="30">真实姓名：</td>
+                                <td width="578" align="left" height="30"><input type="text" th:value="${entity.name}" class="finput3" id="name" value="" placeholder="请输入真实姓名"/></td>
                             </tr>
                             <tr>
                                 <td width="100" align="left" height="30">联系方式：</td>
-                                <td width="578" align="left" height="30"><input type="text" th:value="${entity.linkTel}" class="finput3" id="linkTel" name="linkTel" value="" placeholder="请输入真实姓名"/></td>
+                                <td width="578" align="left" height="30"><input type="text" th:value="${entity.linkTel}" class="finput3" id="linkTel" value="" placeholder="请输入真实姓名"/></td>
                             </tr>
                             <tr>
-                            	<td width="100" align="left" height="30">身份证号码：</td>
-                                <td width="578" align="left" height="30"><input type="text" th:value="${entity.icCode}" class="finput3" id="icCode" name="icCode" value="" placeholder="请输入身份证号码"/></td>
+                                <td width="100" align="left" height="30">身份证号码：</td>
+                                <td width="578" align="left" height="30"><input type="text" th:value="${entity.icCode}" class="finput3" id="icCode" value="" placeholder="请输入身份证号码"/></td>
                             </tr>
                             <tr>
                                 <td width="62">所在地：</td>
                                 <td width="588">
-                                    <select id="province" name="province">
+                                    <select id="province">
                                         <option th:selected="${entity.province==1?'selected':'false'}" value="1">北京</option>
                                         <option th:selected="${entity.province==2?'selected':'false'}" value="2">天津</option>
                                         <option th:selected="${entity.province==3?'selected':'false'}" value="3">上海</option>
@@ -84,52 +116,22 @@
                                     </select>
                                 </td>
                             </tr>
-                                <tr>
-                                    <td colspan="2" height="30"><span class="fspan9" th:text="${message}"></span></td>
-                                </tr>
                             <tr>
-                            	<td colspan="2" height="30">提示：<span class="fspan9"> 您的资料将被默认保存为第一游客信息，请您完整如实填写，避免资料不实带来的不便。</span></td>
+                                <td colspan="2" height="30"><span class="fspan9" th:text="${message}"></span></td>
                             </tr>
                             <tr>
-                            	<td colspan="2" height="30"><button type="submit">
+                                <td colspan="2" height="30">提示：<span class="fspan9"> 您的资料将被默认保存为第一游客信息，请您完整如实填写，避免资料不实带来的不便。</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" height="30"><button type="submit">
                                     <input type="image" src="images/fbtn2.png"/></button>
                                 </td>
                             </tr>
                         </table>
-                    </p>
-                </form>
+                        </p>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!--<div class="footer1">
-
-</div>
-<style>
-    .footer1{
-
-        height: 30px;
-
-        width: 100%;
-
-        background-color: #ddd;
-
-        position: fixed;
-
-        bottom: 0;
-
-    }
-</style>-->
-<!--<div class="footer_w">
-    <div class="footer clearfix">
-        <div class="footer_c">
-          <p>地址：哈佛大学 &nbsp;| &nbsp;服务热线：13559778312 &nbsp; | &nbsp;传真：13559778312  备案号：13559778312</p>
-            <p> 中国梦想旅游发展有限公司 All Rights Reserved. 技术支持：<a href="#">哈佛大学</a></p>
-        </div>
-        <div class="f_logo"><img src="images/b_logo.jpg"/></div>
-        <br style="clear:both"/>
-    </div>
-</div>-->
-</body>
-</html>

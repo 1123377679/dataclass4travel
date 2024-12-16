@@ -167,6 +167,7 @@ public class TPzUserController {
             if (!b) {
                 return new CommonResult(500, "密码更新异常");
             } else {
+                session.invalidate();
                 return new CommonResult(200, "修改密码成功");
             }
 
@@ -196,5 +197,29 @@ public class TPzUserController {
         model.addAttribute("count_0",count_0);
         model.addAttribute("count_1",count_1);
         return "data/userData";
+    }
+
+    /**
+     * 修改密码
+     * @param user
+     * @param session
+     * @param model
+     * @return
+     */
+    @PostMapping("/user_updateInfo")
+    public String userUpdateInfo(@RequestBody TPzUser user,HttpSession session,Model model){
+        boolean update = tPzUserService.lambdaUpdate().set(TPzUser::getUserName, user.getUserName())
+                .set(TPzUser::getName, user.getName())
+                .set(TPzUser::getLinkTel, user.getLinkTel())
+                .set(TPzUser::getIcCode, user.getIcCode())
+                .set(TPzUser::getProvince, user.getProvince())
+                .update();
+        if (update){
+            TPzUser byId = tPzUserService.getById(user.getId());
+            session.removeAttribute("user");
+            session.setAttribute("user",byId);
+            model.addAttribute("entity", byId);
+        }
+        return "portal/personalIntro";
     }
 }
