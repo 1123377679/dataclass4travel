@@ -1,10 +1,9 @@
 package cn.lanqiao.dataclass4travel.controller;
 
 import cn.lanqiao.dataclass4travel.mapper.HotelMapper;
-import cn.lanqiao.dataclass4travel.pojo.Hotel;
-import cn.lanqiao.dataclass4travel.pojo.TCmsStrategy;
-import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
+import cn.lanqiao.dataclass4travel.pojo.*;
 import cn.lanqiao.dataclass4travel.service.HotelService;
+import cn.lanqiao.dataclass4travel.service.TYwOrderService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
@@ -30,6 +29,9 @@ public class HotelController {
 
     @Autowired
     private HotelService hotelService;
+
+    @Autowired
+    private TYwOrderService tYwOrderService;
 
     @Autowired
     private HotelMapper hotelMapper;
@@ -198,6 +200,46 @@ public class HotelController {
         model.addAttribute("datas",datas);
 
         return "data/hotelData";
+
+    }
+    //酒店预定
+    @GetMapping("user_tohotelOrder/{id}")
+    public String createHotelOrder(@PathVariable String id, HttpSession session,Model model){
+        Hotel hotel = hotelService.getById(id);
+        try {
+            TPzUser user = (TPzUser) session.getAttribute("user");
+            TYwOrder tYwOrder = new TYwOrder();
+            tYwOrder.setAddUserId(user.getId());
+            tYwOrder.setAddTime(DateUtils.getNowTime());
+            tYwOrder.setDeleteStatus(0L);
+            tYwOrder.setUserId(user.getId());
+            tYwOrder.setUserName(user.getUserName());
+            tYwOrder.setProductId(id);
+            tYwOrder.setProductType(2L);
+            tYwOrder.setState(0L);
+            tYwOrder.setOrderCode(DateUtils.getOrderId());
+            tYwOrder.setOrderTime(DateUtils.getNowTime());
+            tYwOrder.setLinkTel(hotel.getLinkPhone());
+            tYwOrder.setIcCode(user.getIcCode());
+
+            tYwOrder.setProductName(hotel.getHotelName());
+            tYwOrder.setFee(hotel.getPrice());
+            tYwOrder.setSetoffTime(DateUtils.getNowTime());
+            tYwOrder.setImgUrl(hotel.getImgUrl());
+
+
+            tYwOrderService.save(tYwOrder);
+            model.addAttribute("msg","预订成功，请前往会员中心-我的订单查看订单");
+
+        }catch (Exception e){
+            e.printStackTrace();
+            model.addAttribute("msg","预定异常");
+
+        }finally {
+
+        }
+        model.addAttribute("entity",hotel);
+        return "portal/hotelAccommodationView";
 
     }
 }
