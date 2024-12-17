@@ -2,7 +2,11 @@ package cn.lanqiao.dataclass4travel.controller;
 
 
 import cn.lanqiao.dataclass4travel.pojo.TCmsCar;
+import cn.lanqiao.dataclass4travel.pojo.TPzUser;
+import cn.lanqiao.dataclass4travel.pojo.TYwOrder;
+import cn.lanqiao.dataclass4travel.pojo.User;
 import cn.lanqiao.dataclass4travel.service.TCmsCarService;
+import cn.lanqiao.dataclass4travel.service.TYwOrderService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
@@ -27,6 +31,8 @@ public class TCmsCarController {
 
     @Autowired
     private TCmsCarService tCmsCarService;
+    @Autowired
+    private TYwOrderService tYwOrderService;
 
 
     /*跳转新增车票页面*/
@@ -208,4 +214,36 @@ public class TCmsCarController {
 
     }
 
+    /*车票预定*/
+
+    @GetMapping("/user_createOrder")
+    public String createOrder(@RequestParam("id") String carId, @RequestParam("product_type") int productType , Model model,HttpSession session){
+        TCmsCar tCmsCar = tCmsCarService.getById(carId);
+
+        try {
+            TPzUser user = (TPzUser) session.getAttribute("user");
+
+            TYwOrder tYwOrder = new TYwOrder();
+            tYwOrder.setUserId(user.getId());
+            tYwOrder.setUserName(user.getUserName());
+            tYwOrder.setProductType(productType);
+            tYwOrder.setProductId(carId);
+            tYwOrder.setProductName(tCmsCar.getTitle());
+            tYwOrder.setOrderTime(DateUtils.getNowTime());
+            tYwOrder.setDeleteStatus(0L);
+            tYwOrder.setState(0L);
+            tYwOrderService.save(tYwOrder);
+            model.addAttribute("msg","预定成功");
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            model.addAttribute("msg","预定失败");
+        }finally {
+        }
+        model.addAttribute("entity",tCmsCar);
+        return "portal/carView";
+
+
+    }
 }
