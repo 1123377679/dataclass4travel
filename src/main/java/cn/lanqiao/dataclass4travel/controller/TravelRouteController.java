@@ -2,8 +2,10 @@ package cn.lanqiao.dataclass4travel.controller;
 
 import cn.lanqiao.dataclass4travel.pojo.TCmsTravelRoute;
 import cn.lanqiao.dataclass4travel.pojo.TPzUser;
+import cn.lanqiao.dataclass4travel.pojo.TYwOrder;
 import cn.lanqiao.dataclass4travel.service.TCmsTravelRouteService;
 import cn.lanqiao.dataclass4travel.service.TPzAdminUserService;
+import cn.lanqiao.dataclass4travel.service.TYwOrderService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
@@ -19,8 +21,6 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.List;
 
 @Controller
 @Slf4j
@@ -29,6 +29,8 @@ public class TravelRouteController {
     private TCmsTravelRouteService tCmsTravelRouteService;
     @Autowired
     private TPzAdminUserService tPzAdminUserService;
+    @Autowired
+    private TYwOrderService tYwOrderService;
     /*车票分页查询*/
     @RequestMapping("/travelRoute_list")
     public String list(@RequestParam(defaultValue = "1") Long pageNumber,
@@ -192,5 +194,48 @@ public class TravelRouteController {
         model.addAttribute("entity", tCmsTravelRoute);//回显数据的对象
         return "/portal/travelRouteView";
     }
-    //cheajdakfa
+    //旅游路线的我要预定功能
+
+    /**
+     * 跳转到预定页面
+     * @param id
+     * @param product_type
+     * @return
+     */
+    @GetMapping("/user_createRouteOrder")
+    public String userCreateOrder(String id,String requirement,Long product_type,Model model,HttpSession session){
+        String viewName="";
+        TCmsTravelRoute tCmsTravelRoute = tCmsTravelRouteService.getById(id);
+        try {
+            TPzUser user = (TPzUser) session.getAttribute("user");
+            TYwOrder tYwOrder = new TYwOrder();
+            tYwOrder.setAddUserId(user.getId());
+            tYwOrder.setAddTime(DateUtils.getNowTime());
+            tYwOrder.setDeleteStatus(0L);
+            tYwOrder.setUserId(user.getId());
+            tYwOrder.setUserName(user.getUserName());
+            tYwOrder.setProductId(id);
+            tYwOrder.setProductType(product_type);
+            tYwOrder.setState(0L);
+            tYwOrder.setOrderCode(DateUtils.getOrderId());
+            tYwOrder.setOrderTime(DateUtils.getNowTime());
+            tYwOrder.setLinkTel(user.getLinkTel());
+            tYwOrder.setIcCode(user.getIcCode());
+            tYwOrder.setProductName(tCmsTravelRoute.getTitle());
+            tYwOrder.setFee(tCmsTravelRoute.getPrice());
+            tYwOrder.setSetoffTime(DateUtils.getNowTime());
+            tYwOrder.setImgUrl(tCmsTravelRoute.getImgUrl());
+            tYwOrder.setRequirement(requirement);
+            viewName="portal/travelRouteView";
+            tYwOrderService.save(tYwOrder);
+            model.addAttribute("msg","预订成功请前往会员中心-我的订单查看");
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("msg","预订异常");
+        }finally {
+        }
+        model.addAttribute("entity", tCmsTravelRoute);//回显数据的对象
+        return viewName;
+
+    }
 }
