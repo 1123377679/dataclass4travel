@@ -83,7 +83,7 @@
                     <br/>
                     <br/>
                     <div class="xq_button">
-                        <a th:if="${session.userName!=null}" th:href="|/user_createOrder?id=${entity.id}&product_type=1|">
+                        <a th:if="${session.userName!=null}" th:href="|/user_createScenicSpotOrder?id=${entity.id}&product_type=1|">
                             <img src="/images/order_button.jpg"/></a>
                         <p th:if="${session.userName==null}"><font color="red">预定请先登陆</font></p>
                         <p><font color="red" th:text="${msg}"></font></p></div>

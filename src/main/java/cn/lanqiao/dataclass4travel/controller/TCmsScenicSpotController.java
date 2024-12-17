@@ -1,15 +1,12 @@
 package cn.lanqiao.dataclass4travel.controller;
 
-import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
-import cn.lanqiao.dataclass4travel.pojo.TYwOrder;
-import cn.lanqiao.dataclass4travel.pojo.User;
+import cn.lanqiao.dataclass4travel.pojo.*;
 import cn.lanqiao.dataclass4travel.service.TYwOrderService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
-import cn.lanqiao.dataclass4travel.pojo.TCmsScenicSpot;
 import cn.lanqiao.dataclass4travel.service.TCmsScenicSpotService;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -29,6 +26,8 @@ public class TCmsScenicSpotController {
 
     @Autowired
     private TCmsScenicSpotService tCmsScenicSpotService;
+
+    @Autowired
     private TYwOrderService tYwOrderService;
 
     /**
@@ -209,8 +208,6 @@ public class TCmsScenicSpotController {
 
         List<Map<String,Object>> list = tCmsScenicSpotService.listMaps(queryWrapper);
 
-        System.out.println("list查询数据: "+list);
-
         Object count_0 = 0;
         if (list.size() > 0) {
             Map<String, Object> map0 = list.get(0);
@@ -239,15 +236,13 @@ public class TCmsScenicSpotController {
     /*
      * 预约
      */
-    @RequestMapping("/createScenicSpotOrder")
-    public String createScenicSpotOrder(String tCmsScenicSpotId, String name,
-                                        String linkTel, String icCode, Long peopleCount,
-                                        String setoffTime, String requirement,
-                                        HttpSession session, Model model){
-        TCmsScenicSpot tCmsScenicSpot = tCmsScenicSpotService.getById(tCmsScenicSpotId);
+    @GetMapping("/user_createScenicSpotOrder")
+    public String createScenicSpotOrder(@RequestParam("id") String id , Model model,HttpSession session){
+
+        TCmsScenicSpot tCmsScenicSpot = tCmsScenicSpotService.getById(id);
 
         try {
-            User user = (User)session.getAttribute("user");
+            TPzUser user = (TPzUser) session.getAttribute("user");
 
             TYwOrder tYwOrder = new TYwOrder();
 
@@ -255,26 +250,29 @@ public class TCmsScenicSpotController {
             tYwOrder.setAddTime(DateUtils.getNowTime());
             tYwOrder.setDeleteStatus(0L);
             tYwOrder.setUserId(user.getId());
-            tYwOrder.setUserName(name);
-            tYwOrder.setProductId(tCmsScenicSpotId);
-            tYwOrder.setProductType(2L);
+            tYwOrder.setUserName(user.getUserName());
+            tYwOrder.setProductId(id);
+//            tYwOrder.setProductType(productType);
             tYwOrder.setState(0L);
             tYwOrder.setOrderCode(DateUtils.getOrderId());
             tYwOrder.setOrderTime(DateUtils.getNowTime());
-            tYwOrder.setLinkTel(linkTel);
-            tYwOrder.setIcCode(icCode);
+            tYwOrder.setLinkTel(user.getIcCode());
+
             tYwOrder.setProductName(tCmsScenicSpot.getSpotName());
             tYwOrder.setFee(tCmsScenicSpot.getTicketsMessage());
-            tYwOrder.setSetoffTime(setoffTime);
+            tYwOrder.setSetoffTime(tCmsScenicSpot.getOpenTime());
             tYwOrder.setImgUrl(tCmsScenicSpot.getImgUrl());
-            tYwOrder.setPeopleCount(peopleCount);
-            tYwOrder.setRequirement(requirement);
+
             tYwOrderService.save(tYwOrder);
-            model.addAttribute("m5g", "预定成功，请前往会员中心-始的订单查看订单");
+            model.addAttribute("msg", "预定成功");
+
         }catch (Exception e){
             e.printStackTrace();
-            model.addAttribute("msg", "预定异常");
+            model.addAttribute("msg", "预定失败");
+        }finally {
+
         }
+
         model.addAttribute("entity", tCmsScenicSpot);
         return "/portal/travelSpotView";
     }
