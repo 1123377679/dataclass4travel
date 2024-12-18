@@ -70,7 +70,7 @@
                           <div class="bshare-custom"><strong>分享到&nbsp;&nbsp;</strong><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div>
                       </dvi>-->
                      <div class="xq_button">
-                        <a th:if="${session.userName!=null}" th:href="|/user_createOrder?id=${entity.id}&product_type=4|">
+                        <a th:if="${session.userName!=null}" th:href="|/user_ding?id=${entity.id}&product_type=4|">
                             <img src="/images/order_button.jpg"/></a>
                         <p th:if="${session.userName==null}"><font color="red">预定请先登陆</font></p>
                         <p><font color="red" th:text="${msg}"></font></p></div>

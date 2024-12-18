@@ -1,11 +1,9 @@
 package cn.lanqiao.dataclass4travel.controller;
 
 
-import cn.lanqiao.dataclass4travel.pojo.Hotel;
-import cn.lanqiao.dataclass4travel.pojo.TCmsCar;
-import cn.lanqiao.dataclass4travel.pojo.TCmsInsurance;
-import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
+import cn.lanqiao.dataclass4travel.pojo.*;
 import cn.lanqiao.dataclass4travel.service.InsuranceService;
+import cn.lanqiao.dataclass4travel.service.TYwOrderService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
 import cn.lanqiao.dataclass4travel.utils.PageHelper;
@@ -29,6 +27,9 @@ import java.util.Map;
 public class InsuranceController {
     @Autowired
     private InsuranceService insuranceService;
+
+    @Autowired
+    private TYwOrderService tYwOrderService;
 
     /**
      * 01.保险分页查询
@@ -233,4 +234,45 @@ public class InsuranceController {
         return "data/insuranceData";
     }
 
+    /**
+     * 下单
+     */
+    @GetMapping("/user_ding")
+    public String buy(@RequestParam("id") String id, @RequestParam("product_type") int productType,Model model , HttpSession httpSession) {
+        TCmsInsurance insurance = insuranceService.getById(id);
+        try {
+            TPzUser user = (TPzUser) httpSession.getAttribute("user");
+            TYwOrder tYwOrder = new TYwOrder();
+
+            tYwOrder.setAddUserId(user.getId());
+            tYwOrder.setAddTime(DateUtils.getNowTime());
+            tYwOrder.setDeleteStatus(0L);
+            tYwOrder.setUserId(user.getId());
+            tYwOrder.setUserName(user.getUserName());
+            tYwOrder.setProductId(id);
+//            tYwOrder.setProductType(productType);
+            tYwOrder.setState(0L);
+            tYwOrder.setOrderCode(DateUtils.getOrderId());
+            tYwOrder.setOrderTime(DateUtils.getNowTime());
+            tYwOrder.setLinkTel(user.getLinkTel());
+            tYwOrder.setIcCode(user.getIcCode());
+
+            tYwOrder.setProductName(insurance.getTitle());
+            tYwOrder.setFee(insurance.getPrice());
+            tYwOrder.setSetoffTime(DateUtils.getNowTime());
+            tYwOrder.setImgUrl(insurance.getImgUrl());
+
+            tYwOrderService.save(tYwOrder);
+            model.addAttribute("msg", "预定成功");
+
+        }catch (Exception e){
+            e.printStackTrace();
+            model.addAttribute("msg", "预定失败");
+        }finally {
+
+        }
+            model.addAttribute("entity",insurance);
+            return "portal/insuranceView";
+
+    }
 }

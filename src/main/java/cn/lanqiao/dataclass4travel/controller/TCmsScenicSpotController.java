@@ -252,11 +252,12 @@ public class TCmsScenicSpotController {
             tYwOrder.setUserId(user.getId());
             tYwOrder.setUserName(user.getUserName());
             tYwOrder.setProductId(id);
-//            tYwOrder.setProductType(productType);
+//            tYwOrder.setProductType(pro);
             tYwOrder.setState(0L);
             tYwOrder.setOrderCode(DateUtils.getOrderId());
             tYwOrder.setOrderTime(DateUtils.getNowTime());
-            tYwOrder.setLinkTel(user.getIcCode());
+            tYwOrder.setLinkTel(user.getLinkTel());
+            tYwOrder.setIcCode(user.getIcCode());
 
             tYwOrder.setProductName(tCmsScenicSpot.getSpotName());
             tYwOrder.setFee(tCmsScenicSpot.getTicketsMessage());
