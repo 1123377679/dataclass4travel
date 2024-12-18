@@ -250,7 +250,7 @@ public class InsuranceController {
             tYwOrder.setUserId(user.getId());
             tYwOrder.setUserName(user.getUserName());
             tYwOrder.setProductId(id);
-//            tYwOrder.setProductType(productType);
+            tYwOrder.setProductType(4L);
             tYwOrder.setState(0L);
             tYwOrder.setOrderCode(DateUtils.getOrderId());
             tYwOrder.setOrderTime(DateUtils.getNowTime());

@@ -224,6 +224,7 @@ public class TCmsCarController {
             TPzUser user = (TPzUser) session.getAttribute("user");
 
             TYwOrder tYwOrder = new TYwOrder();
+            tYwOrder.setAddTime(DateUtils.getNowTime());
             tYwOrder.setUserId(user.getId());
             tYwOrder.setUserName(user.getUserName());
             tYwOrder.setProductType(productType);
