@@ -229,8 +229,11 @@ public class TCmsCarController {
             tYwOrder.setProductType(productType);
             tYwOrder.setProductId(carId);
             tYwOrder.setProductName(tCmsCar.getTitle());
+            tYwOrder.setOrderCode(DateUtils.getOrderId());
             tYwOrder.setOrderTime(DateUtils.getNowTime());
+            tYwOrder.setSetoffTime(DateUtils.getNowTime());
             tYwOrder.setDeleteStatus(0L);
+            tYwOrder.setImgUrl(tCmsCar.getImgUrl());
             tYwOrder.setState(0L);
             tYwOrderService.save(tYwOrder);
             model.addAttribute("msg","预定成功");
