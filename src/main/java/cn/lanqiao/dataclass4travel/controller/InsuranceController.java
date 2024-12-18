@@ -237,7 +237,7 @@ public class InsuranceController {
     /**
      * 下单
      */
-    @GetMapping("/user_ding")
+    @GetMapping("/user_dinga")
     public String buy(@RequestParam("id") String id, @RequestParam("product_type") int productType,Model model , HttpSession httpSession) {
         TCmsInsurance insurance = insuranceService.getById(id);
         try {
