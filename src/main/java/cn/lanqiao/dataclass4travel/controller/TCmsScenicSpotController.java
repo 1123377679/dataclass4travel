@@ -243,9 +243,7 @@ public class TCmsScenicSpotController {
 
         try {
             TPzUser user = (TPzUser) session.getAttribute("user");
-
             TYwOrder tYwOrder = new TYwOrder();
-
             tYwOrder.setAddUserId(user.getId());
             tYwOrder.setAddTime(DateUtils.getNowTime());
             tYwOrder.setDeleteStatus(0L);
