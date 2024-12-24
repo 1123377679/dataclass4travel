@@ -243,16 +243,14 @@ public class TCmsScenicSpotController {
 
         try {
             TPzUser user = (TPzUser) session.getAttribute("user");
-
             TYwOrder tYwOrder = new TYwOrder();
-
             tYwOrder.setAddUserId(user.getId());
             tYwOrder.setAddTime(DateUtils.getNowTime());
             tYwOrder.setDeleteStatus(0L);
             tYwOrder.setUserId(user.getId());
             tYwOrder.setUserName(user.getUserName());
             tYwOrder.setProductId(id);
-//            tYwOrder.setProductType(pro);
+            tYwOrder.setProductType(1L);
             tYwOrder.setState(0L);
             tYwOrder.setOrderCode(DateUtils.getOrderId());
             tYwOrder.setOrderTime(DateUtils.getNowTime());
