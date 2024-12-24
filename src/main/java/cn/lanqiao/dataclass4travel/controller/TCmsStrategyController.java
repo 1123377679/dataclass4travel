@@ -3,10 +3,8 @@ package cn.lanqiao.dataclass4travel.controller;
 import cn.lanqiao.dataclass4travel.mapper.TCmsStrategyMapper;
 
 
+import cn.lanqiao.dataclass4travel.pojo.*;
 
-import cn.lanqiao.dataclass4travel.pojo.TCmsStrategy;
-
-import cn.lanqiao.dataclass4travel.pojo.TPzAdminUser;
 import cn.lanqiao.dataclass4travel.service.TCmsStrategyService;
 import cn.lanqiao.dataclass4travel.utils.CommonResult;
 import cn.lanqiao.dataclass4travel.utils.DateUtils;
@@ -137,16 +135,18 @@ public class TCmsStrategyController {
         }
     }
 
-    @GetMapping("strategy_delete/{id}")
+    @GetMapping("/strategy_delete/{id}")
     @ResponseBody
-    public CommonResult delete(TCmsStrategy tCmsStrategy, @PathVariable("id") String id) {
-
+    public CommonResult delete(@PathVariable("id") String id){
+        //补代码时需要判断这个车票是否在使用，如果在使用要提示暂时不能删除
         TCmsStrategy byId = tCmsStrategyService.getById(id);
-        tCmsStrategy.setDeleteStatus(1L);
+        byId.setDeleteStatus(1L);//删除状态
         tCmsStrategyService.updateById(byId);
-        return new CommonResult(200, "请求成功");
+        log.info("删除攻略信息",id);
 
+        return new CommonResult(200,"请求成功");
     }
+
 
 
     @RequestMapping("/portal_strategy_list")
@@ -241,5 +241,9 @@ public class TCmsStrategyController {
         return "data/strategyData";
     }
 //    数据分析
+
+
+
+//    数据预定
 
 }
