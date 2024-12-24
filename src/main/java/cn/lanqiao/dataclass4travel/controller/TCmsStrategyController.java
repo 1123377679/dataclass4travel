@@ -205,18 +205,38 @@ public class TCmsStrategyController {
         queryWrapper.orderByAsc("STATE");
 
         List<Map<String,Object>> list = tCmsStrategyService.listMaps(queryWrapper);
-        Map<String, Object> map0 = list.get(0);
-        Object count_0 = map0.get("count(id)");
 
-        Map<String, Object> map1 = list.get(1);
-        Object count_1 = map1.get("count(id)");
+// 检查列表长度并初始化默认值
+        int size = list.size();
+        Object count_0 = null;
+        Object count_1 = null;
+        Object count_2 = null;
 
-        Map<String, Object> map2 = list.get(2);
-        Object count_2 = map2.get("count(id)");
+        if (size > 0) {
+            Map<String, Object> map0 = list.get(0);
+            count_0 = map0.get("count(id)");
+        }
 
-        String datas="["+count_0+", "+count_1+", "+count_2+"]";
+        if (size > 1) {
+            Map<String, Object> map1 = list.get(1);
+            count_1 = map1.get("count(id)");
+        }
 
-        model.addAttribute("datas",datas);
+        if (size > 2) {
+            Map<String, Object> map2 = list.get(2);
+            count_2 = map2.get("count(id)");
+        }
+
+// 构建数据字符串，考虑可能的null值
+        String datas = "["
+                + (count_0 != null ? count_0.toString() : "0") + ", "
+                + (count_1 != null ? count_1.toString() : "0") + ", "
+                + (count_2 != null ? count_2.toString() : "0")
+                + "]";
+
+        model.addAttribute("datas", datas);
+
+
 
         return "data/strategyData";
     }
