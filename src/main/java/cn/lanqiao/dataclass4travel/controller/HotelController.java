@@ -139,7 +139,7 @@ public class HotelController {
     public CommonResult delete(Hotel hotel,@PathVariable("id") String id){
         // 待做.判断该酒店发布没
         Hotel byId = hotelService.getById(id);
-        hotel.setDeleteStatus(1L);
+        byId.setDeleteStatus(1L);
         hotelService.updateById(byId);
         return new CommonResult(200,"请求成功");
     }
