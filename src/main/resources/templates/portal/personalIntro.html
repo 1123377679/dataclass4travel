@@ -26,8 +26,9 @@
                     contentType: 'application/json',
                     data: JSON.stringify(formData),
                     success: function(response) {
-                        console.log('Success:', response);
+                        // console.log('Success:', response);
                         // 处理成功响应
+                        alert('修改成功');
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);

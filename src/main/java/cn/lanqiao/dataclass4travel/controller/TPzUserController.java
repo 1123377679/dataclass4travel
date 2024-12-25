@@ -136,6 +136,7 @@ public class TPzUserController {
     public String toPersonInfo(Model model, HttpSession session) {
         TPzUser user = (TPzUser) session.getAttribute("user");
         model.addAttribute("entity", user);
+
         return "portal/personalIntro";
     }
 
@@ -220,6 +221,7 @@ public class TPzUserController {
             session.removeAttribute("user");
             session.setAttribute("user",byId);
             model.addAttribute("entity", byId);
+//            model.addAttribute("message", "修改成功");
         }
         return "portal/personalIntro";
     }
