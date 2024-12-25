@@ -151,9 +151,10 @@ public class TCmsScenicSpotController {
      * 07-删除
      */
     @GetMapping("/scenicSpot_delete/{id}")
+    @ResponseBody
     public CommonResult delete(@PathVariable("id") String id){
         TCmsScenicSpot ById = tCmsScenicSpotService.getById(id);
-        ById.setDeleteStatus(1L);
+        ById.setDeleteStatus(1L);// 删除状态
         tCmsScenicSpotService.updateById(ById);
         return new CommonResult(200, "请求成功");
     }

@@ -97,7 +97,7 @@ public class TYwOrderController {
 
     @RequestMapping("/user_myorderlist")
     public String listWeb(@RequestParam(defaultValue = "1") Long pageNumber,
-                          @RequestParam(defaultValue = "7") Long pageSize,
+                          @RequestParam(defaultValue = "4") Long pageSize,
                           HttpSession session,
                           Model model) {
         // 1. 设置分页查询的条件
