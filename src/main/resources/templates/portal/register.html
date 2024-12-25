@@ -50,9 +50,11 @@
                     type: "POST",
                     data: jQuery(this).serialize(),
                     success: function(response) {
-                        if (response.message === '用户名已存在') {
-                            alert(response.message)
-
+                        if (response.code == 200) {
+                            alert(response.msg)
+                            window.location.href = "/user_tologin";
+                        }else if (response.code == 201){
+                            alert(response.msg)
                         }
                     },
                     error: function() {

@@ -39,11 +39,12 @@ public class TPzUserController {
     private final ITCmsMessageService tCmsMessageService;
 
     @PostMapping("/user_register")
-    public String register(TPzUser tPzUser, Model model, HttpServletResponse response) throws IOException {
+    @ResponseBody
+    public CommonResult register(TPzUser tPzUser, Model model, HttpServletResponse response) throws IOException {
         TPzUser user = tPzUserService.lambdaQuery().eq(TPzUser::getUserName, tPzUser.getUserName()).one();
         if (user != null) {
             model.addAttribute("message", "用户名已存在");
-            return "portal/register";
+            return new CommonResult(201, "用户名已存在");
         }
 
         //设置唯一id
@@ -52,8 +53,7 @@ public class TPzUserController {
         tPzUser.setAddTime(LocalDateTime.now());
         System.out.println("要新增的对象是:" + tPzUser);
         tPzUserService.save(tPzUser);
-        response.getWriter().print("<script>alert('注册成功');</script>");
-        return "portal/login";
+        return new CommonResult(200, "注册成功");
     }
 
     /**
