@@ -34,11 +34,12 @@
                             <input type="hidden" id="pageNumber" name="pageNumber" th:value="${pagerHelper.pageNumber}"/>
                             <input type="hidden" id="size" name="size" th:value="${pagerHelper.pageCount}"/>
                             <input type="hidden" id="pageSize" name="pageSize" th:value="${pagerHelper.pageSize}"/>
-                            <div class="fy_w"><a href="#" th:text="${pagerHelper.pageNumber}+'/'+${pagerHelper.pageCount}+'页'"> </a>
-                                <a class="previousPage">上一页</a>
-                                <a class="toPageOne">首页</a>
-                                <a class="nextPage">下一页</a>
-                                <a class="toPageLast">尾页</a>
+                            <div style="display: flex;justify-content: right; align-items: center;" >
+                                <a href="#" th:text="${pagerHelper.pageNumber}+'/'+${pagerHelper.pageCount}+'页'" style="margin-right: 10px"> </a>
+                                <a class="previousPage" style="margin-right: 10px">上一页</a>
+                                <a class="toPageOne" style="margin-right: 10px">首页</a>
+                                <a class="nextPage" style="margin-right: 10px">下一页</a>
+                                <a class="toPageLast" style="margin-right: 10px">尾页</a>
                             </div>
                         </form>
                     </div>
@@ -71,9 +72,10 @@
                                 <div class="for_t3" th:if="${var.state==1}">已付款</div>
                                 <div class="for_t3" th:if="${var.state==2}">已撤销</div>
                                 <div class="for_t3">
-                                    <a th:if="${var.state==0}" th:href="|/user_topayOrder/${var.id}|">付款</a><br>
-                                    <a th:if="${var.state==0}" th:href="|javascript:cancelOrder('${var.id}',${pagerHelper.pageNumber});|">撤销</a>
-                                </div>                                <br style="clear:both"/>
+                                    <a th:if="${var.state==0}" th:href="|/user_topayOrder/${var.id}|" style="background-color: #0C0C0C; color: white;">付款</a><br>
+                                    <a th:if="${var.state==0}" th:href="|javascript:cancelOrder('${var.id}',${pagerHelper.pageNumber});|" style="background-color: #0C0C0C; color: white;">撤销</a>
+                                </div>
+                                <br style="clear:both"/>
                             </div>
                         </div>
                 </div>
