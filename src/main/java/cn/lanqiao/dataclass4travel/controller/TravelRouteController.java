@@ -15,12 +15,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -187,6 +189,40 @@ public class TravelRouteController {
         model.addAttribute("pagerHelper", pageHelper);
         return "/portal/travelRoute";
     }
+    //日期查询
+//    @GetMapping("/portal_travelRoute_listTwo/{startDate}/{endDate}")
+//    public String DateSelect(@RequestParam(defaultValue = "1") Long pageNumber,
+//                             @RequestParam(defaultValue = "7") Long pageSize,
+//                             @RequestParam(defaultValue = "") String title,
+//                             @PathVariable String startDate,
+//                             @PathVariable String endDate,
+//                             Model model) {
+//        QueryWrapper<TCmsTravelRoute> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.eq("DELETE_STATUS", "0");
+//        queryWrapper.orderByDesc("ADD_TIME");
+//
+//        // 处理标题筛选
+//        if (!"".equals(title)) {
+//            queryWrapper.like("TITLE", title);
+//        }
+//
+//        // 处理日期范围筛选
+//        if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
+//            queryWrapper.between("START_TIME", startDate, endDate);
+//        }
+//        System.out.println(startDate);
+//        System.out.println(endDate);
+//        // 分页查询
+//        IPage<TCmsTravelRoute> page = tCmsTravelRouteService.page(new Page<TCmsTravelRoute>(pageNumber, pageSize), queryWrapper);
+//
+//        // 将分页数据封装到PageHelper对象中
+//        PageHelper<TCmsTravelRoute> pageHelper = new PageHelper<TCmsTravelRoute>(pageNumber, pageSize, page.getPages(), page.getTotal(), page.getRecords());
+//        model.addAttribute("pagerHelper", pageHelper);
+//        System.out.println("QueryWrapper: " + queryWrapper);
+//        return "/portal/travelRoute";  // 返回视图
+//    }
+
+
     //跳转到详情页面
     @GetMapping("/portal_travelRoute_toview/{id}")
     public String toPortalDetail(@PathVariable("id") String id, Model model){
