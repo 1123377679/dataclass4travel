@@ -226,23 +226,15 @@ window.onload=function(){
             alert("请填写有效的开始和结束日期");
             return;
         }
-        console.log(startDate1)
-        console.log(endDate1)
         // 获取所有 .js_con 元素
         // 获取所有包含 .js_c 的元素
         var elements = document.querySelectorAll(".js_con");
-
         elements.forEach(function(element) {
             // 获取该元素下的 .js_c 子元素
             var js_c = element.querySelector(".js_c");
-
             // 获取数据属性
             var startDate = new Date(js_c.getAttribute("data-start-date"));  // th:data-start-date
             var endDate = new Date(js_c.getAttribute("data-end-date"));      // th:data-end-date
-
-            console.log("开始日期：", startDate);
-            console.log("结束日期：", endDate);
-
             // 显示/隐藏 .js_con
             if (startDate >= startDate1 && endDate <= endDate1) {
                 $(element).show();  // 显示符合条件的父项
