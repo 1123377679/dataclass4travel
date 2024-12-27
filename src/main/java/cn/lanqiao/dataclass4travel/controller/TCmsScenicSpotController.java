@@ -257,10 +257,10 @@ public class TCmsScenicSpotController {
             tYwOrder.setOrderTime(DateUtils.getNowTime());
             tYwOrder.setLinkTel(user.getLinkTel());
             tYwOrder.setIcCode(user.getIcCode());
-
+            tYwOrder.setSetoffTime(DateUtils.getNowTime());
             tYwOrder.setProductName(tCmsScenicSpot.getSpotName());
             tYwOrder.setFee(tCmsScenicSpot.getTicketsMessage());
-            tYwOrder.setSetoffTime(tCmsScenicSpot.getOpenTime());
+
             tYwOrder.setImgUrl(tCmsScenicSpot.getImgUrl());
 
             tYwOrderService.save(tYwOrder);
