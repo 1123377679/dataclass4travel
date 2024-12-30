@@ -32,18 +32,18 @@
                         <form id="pageForm" name="pageForm" action="/user_messageList" method="post">
                             <input type="hidden" id="count" name="count" th:value="${pagerHelper.totalCount}"/>
                             <input type="hidden" id="size" name="size" th:value="${pagerHelper.pageCount}"/>
-                            <div class="fy_w">
-                                <a href="#" th:text="${pagerHelper.pageNumber}+'/'+${pagerHelper.pageCount}+'页'"> </a>
+                            <div  style="display: flex;justify-content: right; align-items: center;">
+                                <a href="#" th:text="${pagerHelper.pageNumber}+'/'+${pagerHelper.pageCount}+'页'" style="margin-right: 10px"> </a>
 
                                 <a class="previousPage" th:if="${pagerHelper.pageNumber != 1}"
-                                   th:href="|/user_messageList?pageNumber=${pagerHelper.pageNumber-1}|">上一页</a>
+                                   th:href="|/user_messageList?pageNumber=${pagerHelper.pageNumber-1}|" style="margin-right: 10px">上一页</a>
 
-                                <a class="toPageOne" th:href="|/user_messageList?pageNumber=1|">首页</a>
+                                <a class="toPageOne" th:href="|/user_messageList?pageNumber=1|" style="margin-right: 10px">首页</a>
 
                                 <a class="nextPage" th:if="${pagerHelper.pageNumber != pagerHelper.pageCount}"
-                                   th:href="|/user_messageList?pageNumber=${pagerHelper.pageNumber+1}|">下一页</a>
+                                   th:href="|/user_messageList?pageNumber=${pagerHelper.pageNumber+1}|" style="margin-right: 10px">下一页</a>
 
-                                <a class="toPageLast" th:href="|/user_messageList?pageNumber=${pagerHelper.pageCount}|">尾页</a>
+                                <a class="toPageLast" th:href="|/user_messageList?pageNumber=${pagerHelper.pageCount}|" style="margin-right: 10px">尾页</a>
                             </div>
                         </form>
                     </div>
@@ -67,7 +67,7 @@
                                 <a href="javascript:void(0)" 
                                    th:if="${var.replyContent!=null}" 
                                    onclick="showReplyModal(this)"
-                                   th:data-reply="${var.replyContent}">查看</a>
+                                   th:data-reply="${var.replyContent}" style="background-color: #0C0C0C; color: white;">查看</a>
                             </div>
                             <br style="clear:both"/>
                         </div>
