@@ -108,5 +108,12 @@ public class CommonController {
     public String toPortalAttention(){
         return "/portal/attention";
     }
+    /**
+     * 跳转echarts
+     */
+    @RequestMapping("/echarts")
+    public String toecharts(){
+        return "/echartx/index";
+    }
 
 }
