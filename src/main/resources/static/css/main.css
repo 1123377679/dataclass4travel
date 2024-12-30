@@ -106,6 +106,8 @@
 	.logo{ padding:0;}
 	.top_menu .layui-nav-item[pc],.component,.site-mobile .site-tree-mobile{ display: none !important; }
 	.top_menu .layui-nav-item.showNotice[pc]{ display:inline-block !important; }
+	.top_menu .layui-nav-item.showNoticea[pc]{ display:inline-block !important; }
+
 	.top_menu .layui-nav-item[mobile]{ display:inline-block; }
 	.layui-nav.top_menu,.layui-nav.top_menu .layui-nav-item a{ padding:0 10px; }
 	.layui-layout-admin .layui-main{ margin-right: 0; }
@@ -123,5 +125,6 @@
 }
 @media screen and (max-width:432px){
 	.top_menu .layui-nav-item.showNotice[pc]{ display:none !important; }
+	.top_menu .layui-nav-item.showNoticea[pc]{ display:none !important; }
 	.panel{ width:100%; }
 }
