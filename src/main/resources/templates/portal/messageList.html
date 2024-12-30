@@ -58,13 +58,17 @@
                         </div>
                         <div class="for_m" th:each="var,iterStat: ${pagerHelper.records}">
                             <div class="for_t3" th:text="${var.title}"></div>
-                            <div class="for_t3"><a th:href="|javascript:window.open('/user_messageView/${var.id}','留言详情','height=600, width=600, top=200, left=300');|">详情</a></div>
+                            <div class="for_t3" th:text="${var.content}"></div>
                             <div class="for_t3" th:if="${var.state==0}">未读</div>
                             <div class="for_t3" th:if="${var.state==1}">已读</div>
                             <div class="for_t3" th:if="${var.state==2}">完结</div>
                             <div class="for_t3">
                                 <span href="#" th:if="${var.replyContent==null}">暂无</span>
-                                <a th:href="|javascript:window.open('/user_messageView/${var.id}','留言详情','height=600, width=600, top=200, left=300');|" th:if="${var.replyContent!=null}">查看</a></div>
+                                <a href="javascript:void(0)" 
+                                   th:if="${var.replyContent!=null}" 
+                                   onclick="showReplyModal(this)"
+                                   th:data-reply="${var.replyContent}">查看</a>
+                            </div>
                             <br style="clear:both"/>
                         </div>
 
@@ -139,5 +143,83 @@
         <br style="clear:both"/>
     </div>
 </div>-->
+
+<!-- 在body标签结束前添加模态框 -->
+<div id="replyModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3>回复内容</h3>
+        <p id="replyContent"></p>
+    </div>
+</div>
+
+<style>
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 60%;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.modal-content h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.for_t3 a {
+    font-size: 16px;
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.for_t3 a:hover {
+    text-decoration: underline;
+}
+</style>
+
+<script>
+function showReplyModal(element) {
+    const replyContent = element.getAttribute('data-reply');
+    document.getElementById('replyContent').textContent = replyContent;
+    document.getElementById('replyModal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('replyModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('replyModal');
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}
+</script>
 </body>
 </html>
