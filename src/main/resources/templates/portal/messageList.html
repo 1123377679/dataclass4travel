@@ -64,8 +64,8 @@
                             <div class="for_t3" th:if="${var.state==2}">完结</div>
                             <div class="for_t3">
                                 <span href="#" th:if="${var.replyContent==null}">暂无</span>
-                                <a href="javascript:void(0)" 
-                                   th:if="${var.replyContent!=null}" 
+                                <a href="javascript:void(0)"
+                                   th:if="${var.replyContent!=null}"
                                    onclick="showReplyModal(this)"
                                    th:data-reply="${var.replyContent}" style="background-color: #0C0C0C; color: white;">查看</a>
                             </div>

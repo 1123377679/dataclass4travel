@@ -126,19 +126,19 @@ public class TYwOrderController {
 
 
     //跳转付款页面
-    @RequestMapping("/user_topayOrder/{id}")
-    public String editOrderWeb(@PathVariable String id, Model model) {
-        // 获取订单详情
-        TYwOrder order = tYwOrderService.getById(id);
-        if (order != null) {
-            // 将订单编号和费用添加到模型
-            model.addAttribute("order_code", order.getOrderCode());
-            model.addAttribute("fee", order.getFee());
-        } else {
-            model.addAttribute("error", "订单未找到");
-        }
-        return "portal/pay";  // 返回订单详情页面
-    }
+    // @RequestMapping("/user_topayOrder/{id}")
+    // public String editOrderWeb(@PathVariable String id, Model model) {
+    //     // 获取订单详情
+    //     TYwOrder order = tYwOrderService.getById(id);
+    //     if (order != null) {
+    //         // 将订单编号和费用添加到模型
+    //         model.addAttribute("order_code", order.getOrderCode());
+    //         model.addAttribute("fee", order.getFee());
+    //     } else {
+    //         model.addAttribute("error", "订单未找到");
+    //     }
+    //     return "portal/pay";  // 返回订单详情页面
+    // }
 
 
 //数据分析
